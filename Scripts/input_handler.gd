@@ -3,6 +3,7 @@ extends Node3D
 @onready var audio_player: AudioStreamPlayer3D = $"../AudioStreamPlayer3D"
 @onready var facial_animator = $"../FacialAnimation"
 @onready var llmexchange = $"../LLMExchange"
+@onready var microphone = $"../Microphone"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -18,3 +19,7 @@ func _process(delta: float) -> void:
 		facial_animator.setFacialAUs([6,12],[1,1],2000)
 	if Input.is_action_just_released("Talk"):
 		llmexchange.request_tts("Bonjour Godot, j'espère que tu vas bien", 5000, 0)
+	if Input.is_action_just_released("Record"):
+		microphone._on_record_button_pressed()
+	if Input.is_action_just_released("Play"):
+		microphone._on_play_button_pressed()
