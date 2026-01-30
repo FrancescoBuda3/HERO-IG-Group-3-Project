@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://buks0gs6a2ujx" path="res://Agents/mike.tscn" id="1_jjgbg"]
 [ext_resource type="PackedScene" uid="uid://koi47s63k0ed" path="res://Scenes/UI.tscn" id="2_bo1nx"]
+[ext_resource type="PackedScene" uid="uid://beprnrr6fsxjb" path="res://Agents/lara.tscn" id="3_8gbba"]
 
 [sub_resource type="Environment" id="Environment_jjgbg"]
 
@@ -46,5 +47,11 @@ mesh = SubResource("BoxMesh_bo1nx")
 
 [node name="Ui" parent="." unique_id=1214421155 instance=ExtResource("2_bo1nx")]
 
-[connection signal="recording_started" from="mike" to="Ui" method="_on_mike_recording_started"]
-[connection signal="transcription_finished" from="mike" to="Ui" method="_on_mike_transcription_finished"]
+[node name="lara" parent="." unique_id=374884667 instance=ExtResource("3_8gbba")]
+process_mode = 4
+visible = false
+
+[connection signal="recording_started" from="mike" to="Ui" method="_on_agent_recording_started"]
+[connection signal="transcription_finished" from="mike" to="Ui" method="_on_agent_transcription_finished"]
+[connection signal="recording_started" from="lara" to="Ui" method="_on_agent_recording_started"]
+[connection signal="transcription_finished" from="lara" to="Ui" method="_on_agent_transcription_finished"]

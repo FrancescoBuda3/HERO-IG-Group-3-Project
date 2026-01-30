@@ -4,11 +4,41 @@ extends Node3D
 @onready var ttsrequest = $TTSRequest
 @onready var audioplayer = $"../AudioStreamPlayer3D"
 
+enum EndPoint {
+	OpenWebUI,
+	Ollama
+}
+
+@export var url = "http://127.0.0.1"
+@export var port = "11434"
+@export var endPoint = EndPoint.Ollama # api/chat
+@export var modelName = "llama3.2:latest"
+@export var APIkey = ""
+@export var preprompt = ""
+
+@export var piperPort = 5000
+@export var speakerID = 1
+
+@export var numberOfTurn = 10
+@export var conversationList = []
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	llmrequest.request_completed.connect(_on_llmrequest_completed)
 	ttsrequest.request_completed.connect(_on_ttsrequest_completed)
 
+func nextturn():
+	var jsonpreprompt = {"role":"system","content":preprompt}
+	var jsonfullconv = [jsonpreprompt]
+	jsonfullconv.append_array(conversationList)
+	var jsondata = {"model":modelName,"messages":jsonfullconv,"stream":false}
+	var endpoint = ""
+	if endPoint == EndPoint.OpenWebUI:
+		endpoint = "/api/chat/completions"
+	elif endPoint == EndPoint.Ollama:
+		endpoint = "/api/chat"
+	send_LLM_request(url+":"+port+endpoint,JSON.stringify(jsondata),APIkey)
+	
 func sanitize_text(text: String) -> String:
 	var regex_quotes := RegEx.new()
 	regex_quotes.compile("[\"']")
@@ -45,9 +75,16 @@ func _on_llmrequest_completed(
 		return
 	var response_text = body.get_string_from_utf8()
 	print("Received:", response_text)
-	# Parsing JSON (ton parser custom ou Godot natif)
 	var response_data = JSON.parse_string(response_text)
+	var response = response_data["message"]["content"]
+	add_to_conversation("assistant",response)
+	request_tts(response,5000,speakerID)
 	
+func add_to_conversation(role:String,content:String):
+	var jsonMessage = {"role":role,"content":content}
+	conversationList.append(jsonMessage)
+	if conversationList.size() > numberOfTurn:
+		conversationList.pop_back()
 	
 func request_tts(text: String, piper_port: int, speaker_id: int):
 	text = sanitize_text(text)

@@ -11,10 +11,10 @@ func _process(delta: float) -> void:
 	pass
 
 
-func _on_mike_recording_started() -> void:
+func _on_agent_recording_started() -> void:
 	$HBoxContainer/MarginContainer/TextureRect.texture = load("res://Icons/micon.jpg")
 
 
-func _on_mike_transcription_finished(str) -> void:
+func _on_agent_transcription_finished(str) -> void:
 	$HBoxContainer/MarginContainer/TextureRect.texture = load("res://Icons/micoff.jpg")
 	print(str)
