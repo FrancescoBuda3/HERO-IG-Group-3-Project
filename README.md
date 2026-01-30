@@ -1,6 +1,6 @@
 # Mike the Pedagogical Agent
 
-Welcome to the official repository of Mike The pedagogical agent v3.0 now powered by Godot.
+Welcome to the official repository of **Mike The Pedagogical Agent** v3.0 now powered by Godot.
 
 This project started as a Unity3D project, originally created for a CentraleSupelec Lecture on Artificial Intelligence and Social Sciences.
 
