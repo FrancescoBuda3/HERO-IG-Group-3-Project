@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bomc20vvkbx56"]
+
+[ext_resource type="PackedScene" uid="uid://buks0gs6a2ujx" path="res://Agents/mike.tscn" id="1_jjgbg"]
+
+[sub_resource type="Environment" id="Environment_jjgbg"]
+
+[node name="Main" type="Node3D" unique_id=1537848109]
+
+[node name="mike" parent="." unique_id=1385355835 node_paths=PackedStringArray("gazetarget") instance=ExtResource("1_jjgbg")]
+gazetarget = NodePath("../Camera3D")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=785279935]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6654626, 0.83307827)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1441665432]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9292531, 1.4446422)
+light_energy = 0.5
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=26048246]
+environment = SubResource("Environment_jjgbg")
