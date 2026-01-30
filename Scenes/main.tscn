@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bomc20vvkbx56"]
 
 [ext_resource type="PackedScene" uid="uid://buks0gs6a2ujx" path="res://Agents/mike.tscn" id="1_jjgbg"]
+[ext_resource type="PackedScene" uid="uid://koi47s63k0ed" path="res://Scenes/UI.tscn" id="2_bo1nx"]
 
 [sub_resource type="Environment" id="Environment_jjgbg"]
 
@@ -42,3 +43,8 @@ mesh = SubResource("BoxMesh_jjgbg")
 [node name="Wall" type="MeshInstance3D" parent="Stage" unique_id=1767473961]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -1.5)
 mesh = SubResource("BoxMesh_bo1nx")
+
+[node name="Ui" parent="." unique_id=1214421155 instance=ExtResource("2_bo1nx")]
+
+[connection signal="recording_started" from="mike" to="Ui" method="_on_mike_recording_started"]
+[connection signal="transcription_finished" from="mike" to="Ui" method="_on_mike_transcription_finished"]
