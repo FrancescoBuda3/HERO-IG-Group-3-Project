@@ -16,7 +16,9 @@ You can clone the current project using your favorite Git Client or you can down
 
 Mike the PA should work on Linux, Windows and MacOS versions of Godot starting from version 4.6.
 
-For the TTS, it uses Piper-TTS
+For the TextToSpeech, it uses [Piper-TTS](https://github.com/OHF-Voice/piper1-gpl). You can follow their instructions to install Piper-TTS, to download voices and to serve them locally.
+
+For the SpeechToText, it uses [Godot Whisper](https://github.com/V-Sekai/godot-whisper). The default tiny.en model for english is provided but downloading additional (and bigger) language models can be done from [huggingfaces](https://huggingface.co/collections/openai/whisper-release)
 
 As a Godot project, you need to add the project in your project's list using Godot "Import" functionality.
 
@@ -24,15 +26,17 @@ As a Godot project, you need to add the project in your project's list using God
 
 Once the project opened in Godot, open the *main.tscn* file to load the default scene. If you are familiar with Godot, you should get around quite easily.
 
-The scene only has a fake background, a Camera, some lighting and our agent. The agent is a Node equipped with custom scripts in order to allow him to :
-- Run a dialog using an external LLM, UI Buttons are used to start and stop recording your voice.  
-- Follow an object with its gaze
+By default, the agent expects that Piper-TTS is serving a voice model at **http://localhost:5000** and that Ollama is serving a *llama3.2:latest* model at **http://localhost:11434**.
+
+The *main.tscn* scene only has a fake background, a Camera, some lighting and our agent. The agent is a Node equipped with custom scripts in order to allow him to :
+- Run a dialog using an external LLM (start and stop recording your voice with the SpaceBar, the agent will then reply).  
+- Follow an object with its gaze (by default, the camera)
 - Perform some pre-rendered animations (downloaded from Mixamo)
-- Do basic lip animation mixed with facial expressions
+- Do basic lip animation mixed with facial expressions while there is audio playing
 
 The project is quite light and straightforward. It does not compete with other exising agent plaforms such as [Greta](https://github.com/isir/greta), Marc or [VHTK](https://vhtoolkit.ict.usc.edu/) but can be a good playground to manipulate an interactive character.
 
 
-If you use Mike the PA in one of your projects, citing this repository is appreciated.
+If you use **Mike the Pedagogical Agent** in one of your projects, citing this repository is appreciated.
 
 Copyright. Brian Ravenet
