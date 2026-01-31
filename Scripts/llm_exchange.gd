@@ -76,7 +76,11 @@ func _on_llmrequest_completed(
 	var response_text = body.get_string_from_utf8()
 	print("Received:", response_text)
 	var response_data = JSON.parse_string(response_text)
-	var response = response_data["message"]["content"]
+	var response
+	if endPoint == EndPoint.Ollama:
+		response = response_data["message"]["content"]
+	elif endPoint == EndPoint.OpenWebUI:
+		response = response_data["choices"][0]["message"]["content"]
 	add_to_conversation("assistant",response)
 	request_tts(response,5000,speakerID)
 	
