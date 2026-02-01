@@ -37,7 +37,12 @@ func nextturn():
 		endpoint = "/api/chat/completions"
 	elif endPoint == EndPoint.Ollama:
 		endpoint = "/api/chat"
-	send_LLM_request(url+":"+port+endpoint,JSON.stringify(jsondata),APIkey)
+	var finalurl = ""
+	if port != "":
+		finalurl = url+":"+port+endpoint
+	else:
+		finalurl = url+endpoint
+	send_LLM_request(finalurl,JSON.stringify(jsondata),APIkey)
 	
 func sanitize_text(text: String) -> String:
 	var regex_quotes := RegEx.new()
