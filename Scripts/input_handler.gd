@@ -1,9 +1,9 @@
 extends Node3D
 
 @onready var audio_player: AudioStreamPlayer3D = $"../AudioStreamPlayer3D"
-@onready var facial_animator = $"../FacialAnimation"
-@onready var llmexchange = $"../LLMExchange"
-@onready var microphone = $"../Microphone"
+@onready var facial_animator:FacialAnimation = $"../FacialAnimation"
+@onready var llmexchange:LLMExchange = $"../LLMExchange"
+@onready var microphone:Microphone = $"../Microphone"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

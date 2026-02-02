@@ -1,7 +1,7 @@
 extends Node3D
 
 @export var gazetarget:Node3D
-@onready var llmexchange = $LLMExchange
+@onready var llmexchange:LLMExchange = $LLMExchange
 
 signal recording_started
 signal recording_ended

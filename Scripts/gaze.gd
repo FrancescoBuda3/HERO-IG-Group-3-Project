@@ -1,4 +1,5 @@
 extends Node3D
+class_name Gaze
 """
 Gestion du regard avec des bones (yeux, tête, colonne)
 """
@@ -6,14 +7,14 @@ Gestion du regard avec des bones (yeux, tête, colonne)
 @onready var skeleton: Skeleton3D = $"../Armature_1/Skeleton3D"
 @export var target: Node3D
 
-@export var spine_bone_name := "Spine1"
-@export var head_bone_name := "Head"
-@export var left_eye_bone_name := "LeftEye"
-@export var right_eye_bone_name := "RightEye"
+@export var spine_bone_name:String = "Spine1"
+@export var head_bone_name:String = "Head"
+@export var left_eye_bone_name:String = "LeftEye"
+@export var right_eye_bone_name:String = "RightEye"
 
 @export var speed: float = 5.0
 
-func _process(_delta):
+func _process(_delta)->void:
 	if skeleton == null or target == null:
 		return
 
@@ -24,21 +25,21 @@ func _process(_delta):
 
 
 func _look_at_bone(bone_name: String, weight: float) -> void:
-	var bone_idx = skeleton.find_bone(bone_name)
+	var bone_idx:int = skeleton.find_bone(bone_name)
 	if bone_idx == -1:
 		return
 
 	# Transform global actuel du bone
-	var bone_global = skeleton.get_bone_global_pose(bone_idx)
+	var bone_global:Transform3D = skeleton.get_bone_global_pose(bone_idx)
 
 	# Direction vers la cible
-	var dir = (target.global_position - bone_global.origin).normalized()
+	var dir:Vector3 = (target.global_position - bone_global.origin).normalized()
 
 	# Axe forward du bone (souvent -Z)
-	var forward = bone_global.basis.z.normalized()
+	var forward:Vector3 = bone_global.basis.z.normalized()
 
 	# Quaternion qui amène forward -> dir
-	var rot = Quaternion(forward, dir)
+	var rot:Quaternion = Quaternion(forward, dir)
 
 	# On blend pour éviter un snap brutal
 	rot = Quaternion.IDENTITY.slerp(rot, weight)

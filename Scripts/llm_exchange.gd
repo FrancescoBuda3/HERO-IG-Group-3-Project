@@ -1,6 +1,7 @@
 extends Node3D
+class_name LLMExchange
 
-@onready var llmrequest = $LLMRequest
+@onready var llmrequest:HTTPRequest = $LLMRequest
 signal llm_response_received
 
 enum EndPoint {
@@ -8,15 +9,12 @@ enum EndPoint {
 	Ollama
 }
 
-@export var url = "http://127.0.0.1"
-@export var port = "11434"
-@export var endPoint = EndPoint.Ollama # api/chat
-@export var modelName = "llama3.2:latest"
-@export var APIkey = ""
-@export var preprompt = ""
-
-@export var piperPort = 5000
-@export var speakerID = 1
+@export var url:String = "http://127.0.0.1"
+@export var port:String = "11434"
+@export var endPoint:EndPoint = EndPoint.Ollama # api/chat
+@export var modelName:String = "llama3.2:latest"
+@export var APIkey:String = ""
+@export_multiline var preprompt:String = ""
 
 @export var numberOfTurn = 10
 @export var conversationList = []
@@ -25,17 +23,17 @@ enum EndPoint {
 func _ready() -> void:
 	llmrequest.request_completed.connect(_on_llmrequest_completed)
 	
-func nextturn():
-	var jsonpreprompt = {"role":"system","content":preprompt}
-	var jsonfullconv = [jsonpreprompt]
+func nextturn()->void:
+	var jsonpreprompt:Dictionary = {"role":"system","content":preprompt}
+	var jsonfullconv:Array = [jsonpreprompt]
 	jsonfullconv.append_array(conversationList)
-	var jsondata = {"model":modelName,"messages":jsonfullconv,"stream":false}
-	var endpoint = ""
+	var jsondata:Dictionary = {"model":modelName,"messages":jsonfullconv,"stream":false}
+	var endpoint:String = ""
 	if endPoint == EndPoint.OpenWebUI:
 		endpoint = "/api/chat/completions"
 	elif endPoint == EndPoint.Ollama:
 		endpoint = "/api/chat"
-	var finalurl = ""
+	var finalurl:String = ""
 	if port != "":
 		finalurl = url+":"+port+endpoint
 	else:
@@ -44,11 +42,11 @@ func nextturn():
 	
 
 func send_LLM_request(finalurl:String,json: String) -> void:
-	var headers = [
+	var headers:Array = [
 		"Content-Type: application/json",
 		"Authorization: Bearer %s" % APIkey
 	]
-	var error = llmrequest.request(
+	var error:Error = llmrequest.request(
 		finalurl,
 		headers,
 		HTTPClient.METHOD_POST,
@@ -66,10 +64,10 @@ func _on_llmrequest_completed(
 	if result != HTTPRequest.RESULT_SUCCESS:
 		print("Error while sending:", result)
 		return
-	var response_text = body.get_string_from_utf8()
+	var response_text:String = body.get_string_from_utf8()
 	print("Received:", response_text)
-	var response_data = JSON.parse_string(response_text)
-	var response
+	var response_data:Dictionary = JSON.parse_string(response_text)
+	var response:String
 	if endPoint == EndPoint.Ollama:
 		response = response_data["message"]["content"]
 	elif endPoint == EndPoint.OpenWebUI:
@@ -78,7 +76,7 @@ func _on_llmrequest_completed(
 	emit_signal("llm_response_received",response)
 	
 func add_to_conversation(role:String,content:String):
-	var jsonMessage = {"role":role,"content":content}
+	var jsonMessage:Dictionary = {"role":role,"content":content}
 	conversationList.append(jsonMessage)
 	if conversationList.size() > numberOfTurn:
 		conversationList.pop_back()

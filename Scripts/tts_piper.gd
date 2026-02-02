@@ -10,11 +10,11 @@ func _ready() -> void:
 	ttsrequest.request_completed.connect(_on_ttsrequest_completed)
 
 func sanitize_text(text: String) -> String:
-	var regex_quotes := RegEx.new()
+	var regex_quotes:RegEx = RegEx.new()
 	regex_quotes.compile("[\"']")
 	text = regex_quotes.sub(text, "", true)
 
-	var regex_space := RegEx.new()
+	var regex_space:RegEx = RegEx.new()
 	regex_space.compile("\\s+")
 	text = regex_space.sub(text, " ", true)
 
@@ -24,20 +24,20 @@ func sanitize_text(text: String) -> String:
 func request_tts(text: String) -> void:
 	text = sanitize_text(text)
 
-	var json_body = {
+	var json_body:Dictionary = {
 		"text": text,
 		"speaker_id": speaker_id
 	}
 
-	var json_string = JSON.stringify(json_body)
+	var json_string:String = JSON.stringify(json_body)
 
 	var headers = [
         "Content-Type: application/json"
 	]
 
-	var url = "http://localhost:%d" % piper_port
+	var url:String = "http://localhost:%d" % piper_port
 
-	var err = ttsrequest.request(
+	var err:Error = ttsrequest.request(
 		url,
 		headers,
 		HTTPClient.METHOD_POST,
@@ -59,7 +59,7 @@ func _on_ttsrequest_completed(
 		return
 
 	# body = wav bytes
-	var wav = AudioStreamWAV.new()
+	var wav:AudioStreamWAV = AudioStreamWAV.new()
 	wav.data = body
 	wav.format = AudioStreamWAV.FORMAT_16_BITS
 	#wav.mix_rate = 22050  # ⚠ dépend de Piper (souvent 22050 ou 16000)
