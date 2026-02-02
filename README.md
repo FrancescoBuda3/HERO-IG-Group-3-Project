@@ -2,7 +2,7 @@
 
 Welcome to the official repository of **Mike The Pedagogical Agent** v3.0 now powered by Godot.
 
-![MikeThePA](./img/miketpa.png)
+![MikeThePA](./img/mikethepa.png)
 
 This project started as a Unity3D project, originally created for a CentraleSupelec Lecture on Artificial Intelligence and Social Sciences.
 
