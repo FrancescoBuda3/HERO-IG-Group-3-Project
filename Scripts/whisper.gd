@@ -2,6 +2,8 @@ class_name Whisper
 extends SpeechToText
 @export var initial_prompt: String
 
+func _ready() -> void:
+	pass#language_model = load("res://addons/godot_whisper/models/gglm-tiny.en.bin")
 
 func _get_configuration_warnings():
 	if language_model == null:

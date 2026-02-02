@@ -2,7 +2,9 @@
 
 [ext_resource type="PackedScene" uid="uid://buks0gs6a2ujx" path="res://Agents/mike.tscn" id="1_jjgbg"]
 [ext_resource type="PackedScene" uid="uid://koi47s63k0ed" path="res://Scenes/UI.tscn" id="2_bo1nx"]
+[ext_resource type="Texture2D" uid="uid://dwu7qmg8jkbsa" path="res://Textures/ups.png" id="2_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://beprnrr6fsxjb" path="res://Agents/lara.tscn" id="3_8gbba"]
+[ext_resource type="Texture2D" uid="uid://b8e3q0hul5gjr" path="res://Textures/CS.png" id="3_kry3j"]
 
 [sub_resource type="Environment" id="Environment_jjgbg"]
 
@@ -14,11 +16,25 @@ material = SubResource("StandardMaterial3D_jjgbg")
 size = Vector3(7, 1, 5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bo1nx"]
-albedo_color = Color(0.1766069, 9.901699e-05, 0.22687864, 1)
+albedo_color = Color(0.9938981, 1, 0.89686763, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_bo1nx"]
 material = SubResource("StandardMaterial3D_bo1nx")
 size = Vector3(7, 5, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_kry3j"]
+size = Vector2(1, 0.33)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_21xkr"]
+transparency = 1
+albedo_texture = ExtResource("2_jjvhh")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jjvhh"]
+size = Vector2(1, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jjvhh"]
+transparency = 1
+albedo_texture = ExtResource("3_kry3j")
 
 [node name="Main" type="Node3D" unique_id=1537848109]
 
@@ -27,6 +43,7 @@ gazetarget = NodePath("../Camera3D")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=785279935]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.665, 0.833)
+fov = 50.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1441665432]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9292531, 1.4446422)
@@ -45,13 +62,27 @@ mesh = SubResource("BoxMesh_jjgbg")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -1.5)
 mesh = SubResource("BoxMesh_bo1nx")
 
+[node name="LogoUPS" type="MeshInstance3D" parent="Stage" unique_id=686972522]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.693, 2.2, -0.951)
+mesh = SubResource("PlaneMesh_kry3j")
+surface_material_override/0 = SubResource("StandardMaterial3D_21xkr")
+
+[node name="LogoCS" type="MeshInstance3D" parent="Stage" unique_id=701452842]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.812, 2.2, -0.951)
+mesh = SubResource("PlaneMesh_jjvhh")
+surface_material_override/0 = SubResource("StandardMaterial3D_jjvhh")
+
 [node name="Ui" parent="." unique_id=1214421155 instance=ExtResource("2_bo1nx")]
 
 [node name="lara" parent="." unique_id=374884667 instance=ExtResource("3_8gbba")]
 process_mode = 4
 visible = false
 
+[connection signal="llmresponse_received" from="mike" to="Ui" method="_on_agent_llmresponse_received"]
+[connection signal="recording_ended" from="mike" to="Ui" method="_on_agent_recording_ended"]
 [connection signal="recording_started" from="mike" to="Ui" method="_on_agent_recording_started"]
 [connection signal="transcription_finished" from="mike" to="Ui" method="_on_agent_transcription_finished"]
+[connection signal="llmresponse_received" from="lara" to="Ui" method="_on_agent_llmresponse_received"]
+[connection signal="recording_ended" from="lara" to="Ui" method="_on_agent_recording_ended"]
 [connection signal="recording_started" from="lara" to="Ui" method="_on_agent_recording_started"]
 [connection signal="transcription_finished" from="lara" to="Ui" method="_on_agent_transcription_finished"]

@@ -19,7 +19,7 @@ Mike the PA should work on Linux, Windows and MacOS versions of Godot starting f
 For the TextToSpeech, it uses [Piper-TTS](https://github.com/OHF-Voice/piper1-gpl). You can follow their instructions to install Piper-TTS, to download voices and to serve them locally.
 
 For the SpeechToText, it uses [Godot Whisper](https://github.com/V-Sekai/godot-whisper). The default tiny.en model for english is provided but downloading additional (and bigger) language models can be done from [huggingfaces](https://huggingface.co/collections/openai/whisper-release)
-
+ (or [here](https://huggingface.co/ggerganov/whisper.cpp/tree/main))
 As a Godot project, you need to add the project in your project's list using Godot "Import" functionality.
 
 # Usage

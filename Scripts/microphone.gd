@@ -4,10 +4,13 @@ extends AudioStreamPlayer3D
 @onready var whisper = $"../Whisper"
 
 signal recording_started
+signal recording_ended
 signal transcription_finished
 
 var effect
 var recording
+
+var is_transcribing = false
 
 var thread : Thread
 
@@ -45,10 +48,14 @@ func _on_record_button_pressed():
 				newData.encode_u16(i / 2, (left + right) / 2)
 			recording.data = newData
 			recording.set_stereo(false)
+		emit_signal("recording_ended")
+		is_transcribing = true
+		if thread != null and not thread.is_alive():
+			thread.wait_to_finish()
 		thread = Thread.new()
 		thread.start(transcribe_thread.bind(recording.format).bind(recording.data).bind(self))
 		
-	else:
+	elif not is_transcribing:
 		effect.set_recording_active(true)
 		emit_signal("recording_started")
 
@@ -58,6 +65,7 @@ func transcribe_thread(wspr,data,format):
 
 func transcr_finished(transcription):
 	emit_signal("transcription_finished",transcription)
+	is_transcribing = false
 
 func _on_play_button_pressed():
 	print(recording)

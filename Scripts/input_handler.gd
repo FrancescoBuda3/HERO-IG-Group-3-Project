@@ -13,12 +13,8 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	if Input.is_action_just_released("Hello"):
-		audio_player.play()
 	if Input.is_action_just_released("Smile"):
 		facial_animator.setFacialAUs([6,12],[1,1],2000)
-	if Input.is_action_just_released("Talk"):
-		llmexchange.request_tts("Bonjour Godot, j'espère que tu vas bien", 5000, 0)
 	if Input.is_action_just_released("Record"):
 		microphone._on_record_button_pressed()
 	if Input.is_action_just_released("Play"):
