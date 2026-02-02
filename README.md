@@ -2,6 +2,8 @@
 
 Welcome to the official repository of **Mike The Pedagogical Agent** v3.0 now powered by Godot.
 
+![MikeThePA](./img/miketpa.png)
+
 This project started as a Unity3D project, originally created for a CentraleSupelec Lecture on Artificial Intelligence and Social Sciences.
 
 This project contains the foundation of a Socially Interactive Agent or Embodied Conversational Agent.
