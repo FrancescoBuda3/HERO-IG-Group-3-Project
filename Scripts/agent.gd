@@ -11,17 +11,11 @@ func _ready() -> void:
 	if gazetarget != null:
 		$Gaze.target = gazetarget
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
-
 func _on_microphone_recording_started() -> void:
 	emit_signal("recording_started")
 
 
-func _on_microphone_transcription_finished(str) -> void:
-	emit_signal("transcription_finished",str)
-	llmexchange.add_to_conversation("user",str)
+func _on_microphone_transcription_finished(transcription) -> void:
+	emit_signal("transcription_finished",transcription)
+	llmexchange.add_to_conversation("user",transcription)
 	llmexchange.nextturn()

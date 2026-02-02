@@ -9,8 +9,6 @@ func _get_configuration_warnings():
 	else:
 		return []
 
-@export var text: String
-
 func get_text(data,format)->String:
 	var data_float : PackedFloat32Array
 	match format:
@@ -33,7 +31,7 @@ func get_text(data,format)->String:
 		text = full_text
 		return _remove_special_characters(text)
 
-func _remove_special_characters(message: String):
+func _remove_special_characters(message: String)->String:
 	var special_characters := [ \
 		{ "start": "[", "end": "]" }, \
 		{ "start": "<", "end": ">" }]

@@ -13,17 +13,17 @@ Gestion du regard avec des bones (yeux, tête, colonne)
 
 @export var speed: float = 5.0
 
-func _process(delta):
+func _process(_delta):
 	if skeleton == null or target == null:
 		return
 
-	_look_at_bone(spine_bone_name, 0.75, delta)
-	_look_at_bone(head_bone_name, 0.75, delta)
-	_look_at_bone(left_eye_bone_name, 0.75, delta)
-	_look_at_bone(right_eye_bone_name, 0.75, delta)
+	_look_at_bone(spine_bone_name, 0.75)
+	_look_at_bone(head_bone_name, 0.75)
+	_look_at_bone(left_eye_bone_name, 0.75)
+	_look_at_bone(right_eye_bone_name, 0.75)
 
 
-func _look_at_bone(bone_name: String, weight: float, delta: float) -> void:
+func _look_at_bone(bone_name: String, weight: float) -> void:
 	var bone_idx = skeleton.find_bone(bone_name)
 	if bone_idx == -1:
 		return

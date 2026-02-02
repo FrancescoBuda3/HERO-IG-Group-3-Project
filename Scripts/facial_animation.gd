@@ -11,7 +11,7 @@ var facialExpressionDuration = 2000.0
 var aus:Array = [ 0 ]
 
 
-var curve := Curve.new()
+var curve = Curve.new()
 
 
 
@@ -22,7 +22,8 @@ var viseme_animation_parameters_back: Dictionary[String, float] = {}
 var face_animation_parameters: Dictionary[int,ActionUnit] = {}
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	
+	randomize()
+	deltaBlink = randf_range(-1.0,1.0)
 	curve.add_point(Vector2(0.0, 0.0))
 	curve.add_point(Vector2(0.25, 1.0))
 	curve.add_point(Vector2(0.75, 1.0))
@@ -55,9 +56,9 @@ func _ready() -> void:
 		"viseme_O",
 	    "viseme_U"
 	]
-	for name in viseme_names:
-		viseme_animation_parameters[name] = 0
-		viseme_animation_parameters_back[name] = 0
+	for viseme_name in viseme_names:
+		viseme_animation_parameters[viseme_name] = 0
+		viseme_animation_parameters_back[viseme_name] = 0
 	
 	
 	# AU1
@@ -145,7 +146,7 @@ func set_random_viseme() -> void:
 	viseme_animation_parameters[key] = 1
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var now = Time.get_ticks_msec()
 	var lipLerp:float = (now - referenceVisemeTime) / (timeBetweenViseme)
 	var faceLerp = (now - referenceFaceTime) / facialExpressionDuration
@@ -162,6 +163,13 @@ func _process(delta: float) -> void:
 
 	lerp_viseme(lipLerp)
 	interpolate_face(faceLerp)
+	#Blink
+	if now > referenceBlinkTime + timeBetweenBlink + deltaBlink:
+		blink()
+	if now > referenceBlinkTime + timeBetweenBlink + deltaBlink + 200.0:
+		unblink()
+		referenceBlinkTime = now;
+		deltaBlink = randf_range(-1.0, 1.0)
 
 func lerp_viseme(lerp_amount: float) -> void:
 	for mesh_target in Meshes:
@@ -196,6 +204,30 @@ func interpolate_face(lerp_amount: float) -> void:
 						clampf(curve.sample(lerp_amount),0,1)
 					)
 					mesh_target.set_blend_shape_value(blend_index, weight)
+
+func blink():
+	for mesh_target in Meshes:
+		var m: Mesh = mesh_target.mesh
+		if m == null:
+			continue
+		var i = get_blend_shape_index(mesh_target,"eyeBlinkLeft")
+		var j = get_blend_shape_index(mesh_target,"eyeBlinkRight")
+		if i >= 0 && j >= 0:
+			mesh_target.set_blend_shape_value(i, 1)
+			mesh_target.set_blend_shape_value(j, 1)
+		
+	
+func unblink():
+	for mesh_target in Meshes:
+		var m: Mesh = mesh_target.mesh
+		if m == null:
+			continue
+		var i = get_blend_shape_index(mesh_target,"eyeBlinkLeft")
+		var j = get_blend_shape_index(mesh_target,"eyeBlinkRight")
+		if i >= 0 && j >= 0:
+			mesh_target.set_blend_shape_value(i, 0)
+			mesh_target.set_blend_shape_value(j, 0)
+
 
 func get_blend_shape_index(mesh_instance: MeshInstance3D, blend_name: String) -> int:
 	var mesh = mesh_instance.mesh
