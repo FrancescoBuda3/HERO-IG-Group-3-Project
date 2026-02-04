@@ -29,8 +29,6 @@ transitions = ["Start", "MikeAnimLib_Idle", SubResource("AnimationNodeStateMachi
 [node name="lara" type="Node3D" unique_id=374884667]
 script = ExtResource("1_aqp86")
 
-[node name="Armature_1" parent="." unique_id=1451175644 instance=ExtResource("2_fc4h4")]
-
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1506054848]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=404573202]
@@ -40,25 +38,25 @@ libraries/MikeAnimLib = ExtResource("29_aqp86")
 tree_root = SubResource("AnimationNodeStateMachine_12wd2")
 anim_player = NodePath("../AnimationPlayer")
 
-[node name="TTSPiper" type="Node" parent="." unique_id=998934079]
-script = ExtResource("4_nd8qi")
-
-[node name="TTSRequest" type="HTTPRequest" parent="TTSPiper" unique_id=1984782519]
-
 [node name="Gaze" type="Node" parent="." unique_id=683012553]
 script = ExtResource("30_x3to0")
 
 [node name="FacialAnimation" type="Node" parent="." unique_id=152124427]
 script = ExtResource("31_0yg6i")
 
-[node name="LLMExchange" type="Node" parent="." unique_id=1552336680]
-script = ExtResource("32_2psej")
+[node name="TTSPiper" type="Node" parent="." unique_id=998934079]
+script = ExtResource("4_nd8qi")
 
-[node name="LLMRequest" type="HTTPRequest" parent="LLMExchange" unique_id=1303993346]
+[node name="TTSRequest" type="HTTPRequest" parent="TTSPiper" unique_id=1984782519]
 
 [node name="Whisper" type="SpeechToText" parent="." unique_id=1632104370]
 language_model = ExtResource("33_6oit0")
 script = ExtResource("34_6tvtk")
+
+[node name="LLMExchange" type="Node" parent="." unique_id=1552336680]
+script = ExtResource("32_2psej")
+
+[node name="LLMRequest" type="HTTPRequest" parent="LLMExchange" unique_id=1303993346]
 
 [node name="Microphone" type="AudioStreamPlayer3D" parent="." unique_id=430180889]
 stream = SubResource("AudioStreamMicrophone_aqp86")
@@ -69,7 +67,10 @@ script = ExtResource("35_37vsa")
 [node name="InputHandler" type="Node" parent="." unique_id=1426645371]
 script = ExtResource("36_lcjvi")
 
+[node name="Armature_1" parent="." unique_id=1451175644 instance=ExtResource("2_fc4h4")]
+
 [connection signal="llm_response_received" from="LLMExchange" to="." method="_on_llm_exchange_llm_response_received"]
 [connection signal="llm_response_received" from="LLMExchange" to="TTSPiper" method="_on_llm_exchange_llm_response_received"]
+[connection signal="recording_ended" from="Microphone" to="." method="_on_microphone_recording_ended"]
 [connection signal="recording_started" from="Microphone" to="." method="_on_microphone_recording_started"]
 [connection signal="transcription_finished" from="Microphone" to="." method="_on_microphone_transcription_finished"]

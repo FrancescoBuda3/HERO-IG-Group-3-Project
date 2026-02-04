@@ -166,7 +166,7 @@ func _process(_delta: float) -> void:
 		var lipLerp:float = (now - referenceVisemeTime) / (timeBetweenViseme)
 		var faceLerp:float = (now - referenceFaceTime) / facialExpressionDuration
 
-		if audiostreamplayer.playing:
+		if audiostreamplayer.playing or DisplayServer.tts_is_speaking():
 			if now - referenceVisemeTime > timeBetweenViseme:
 				update_lip_back_weight()
 				referenceVisemeTime = now

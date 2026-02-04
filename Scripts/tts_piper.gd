@@ -5,9 +5,16 @@ extends Node
 @export var piper_port:int = 5000
 @export var speaker_id:int = 1
 
+@export var use_local_tts_instead:bool = false
+@export var local_tts_language:String = "en"
+@export var local_tts_voice_id = 0
+var voices:PackedStringArray
+var voice_id:String
 
 func _ready() -> void:
 	ttsrequest.request_completed.connect(_on_ttsrequest_completed)
+	voices = DisplayServer.tts_get_voices_for_language(local_tts_language)
+	voice_id = voices[local_tts_voice_id]
 
 func sanitize_text(text: String) -> String:
 	var regex_quotes:RegEx = RegEx.new()
@@ -23,30 +30,32 @@ func sanitize_text(text: String) -> String:
 
 func request_tts(text: String) -> void:
 	text = sanitize_text(text)
+	if not use_local_tts_instead:
+		var json_body:Dictionary = {
+			"text": text,
+			"speaker_id": speaker_id
+		}
 
-	var json_body:Dictionary = {
-		"text": text,
-		"speaker_id": speaker_id
-	}
+		var json_string:String = JSON.stringify(json_body)
 
-	var json_string:String = JSON.stringify(json_body)
+		var headers = [
+	        "Content-Type: application/json"
+		]
 
-	var headers = [
-        "Content-Type: application/json"
-	]
+		var url:String = "http://localhost:%d" % piper_port
 
-	var url:String = "http://localhost:%d" % piper_port
+		var err:Error = ttsrequest.request(
+			url,
+			headers,
+			HTTPClient.METHOD_POST,
+			json_string
+		)
 
-	var err:Error = ttsrequest.request(
-		url,
-		headers,
-		HTTPClient.METHOD_POST,
-		json_string
-	)
-
-	if err != OK:
-		push_error("TTS request error: %s" % err)
-
+		if err != OK:
+			push_error("TTS request error: %s" % err)
+	else:
+		DisplayServer.tts_speak(text, voice_id)
+		
 func _on_ttsrequest_completed(
 	result: int,
 	_response_code: int,
