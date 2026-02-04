@@ -1,6 +1,8 @@
 extends Node3D
 class_name FacialAnimation
 
+var socketBlendShape:bool = false
+
 var timeBetweenViseme:float = 175.0
 var referenceVisemeTime:float
 
@@ -119,6 +121,17 @@ func _ready() -> void:
 	# AU66
 	face_animation_parameters[66] = ActionUnit.new(66, ["eyeLookInLeft", "eyeLookInRight"])
 
+func setBlendShapesFromSocket(categories:Array):
+	socketBlendShape = true
+	for mesh_target in Meshes:
+		var m: Mesh = mesh_target.mesh
+		if m == null:
+			continue
+		for category in categories:
+			var blend_index:int = get_blend_shape_index(mesh_target,category["categoryName"])
+			if blend_index >= 0:
+				mesh_target.set_blend_shape_value(blend_index, category["score"])
+
 func setFacialAUs(_aus:Array, intensities:Array, duration:float)->void:
 	aus = _aus.duplicate(true);
 	facialExpressionDuration = duration;
@@ -148,29 +161,30 @@ func set_random_viseme() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	var now:int = Time.get_ticks_msec()
-	var lipLerp:float = (now - referenceVisemeTime) / (timeBetweenViseme)
-	var faceLerp:float = (now - referenceFaceTime) / facialExpressionDuration
+	if not socketBlendShape:
+		var now:int = Time.get_ticks_msec()
+		var lipLerp:float = (now - referenceVisemeTime) / (timeBetweenViseme)
+		var faceLerp:float = (now - referenceFaceTime) / facialExpressionDuration
 
-	if audiostreamplayer.playing:
-		if now - referenceVisemeTime > timeBetweenViseme:
-			update_lip_back_weight()
-			referenceVisemeTime = now
-			set_random_viseme()
-	else:
-		set_viseme_neutral()
-		if now - referenceFaceTime > facialExpressionDuration:
-			set_face_neutral()
+		if audiostreamplayer.playing:
+			if now - referenceVisemeTime > timeBetweenViseme:
+				update_lip_back_weight()
+				referenceVisemeTime = now
+				set_random_viseme()
+		else:
+			set_viseme_neutral()
+			if now - referenceFaceTime > facialExpressionDuration:
+				set_face_neutral()
 
-	lerp_viseme(lipLerp)
-	interpolate_face(faceLerp)
-	#Blink
-	if now > referenceBlinkTime + timeBetweenBlink + deltaBlink:
-		blink()
-	if now > referenceBlinkTime + timeBetweenBlink + deltaBlink + 200.0:
-		unblink()
-		referenceBlinkTime = now;
-		deltaBlink = randf_range(-1.0, 1.0)
+		lerp_viseme(lipLerp)
+		interpolate_face(faceLerp)
+		#Blink
+		if now > referenceBlinkTime + timeBetweenBlink + deltaBlink:
+			blink()
+		if now > referenceBlinkTime + timeBetweenBlink + deltaBlink + 200.0:
+			unblink()
+			referenceBlinkTime = now;
+			deltaBlink = randf_range(-1.0, 1.0)
 
 func lerp_viseme(lerp_amount: float) -> void:
 	for mesh_target in Meshes:

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://chqplaunun5ce" path="res://Scripts/agent.gd" id="1_aqp86"]
 [ext_resource type="PackedScene" uid="uid://c2iquhqdk7tu0" path="res://Agents/armature_1_lara.tscn" id="2_fc4h4"]
+[ext_resource type="Script" uid="uid://b3xted3d554rg" path="res://Scripts/socket_server.gd" id="11_nd8qi"]
 [ext_resource type="AnimationLibrary" uid="uid://d3r66hflqrvd7" path="res://Animations/MikeAnimLib.res" id="29_aqp86"]
 [ext_resource type="Script" uid="uid://bd45xi7aujda8" path="res://Scripts/gaze.gd" id="30_x3to0"]
 [ext_resource type="Script" uid="uid://cv2pjmndqi1ur" path="res://Scripts/facial_animation.gd" id="31_0yg6i"]
@@ -64,6 +65,10 @@ script = ExtResource("35_37vsa")
 
 [node name="InputHandler" type="Node3D" parent="." unique_id=1993766451]
 script = ExtResource("36_lcjvi")
+
+[node name="SocketServer" type="Node3D" parent="." unique_id=1008059578]
+process_mode = 4
+script = ExtResource("11_nd8qi")
 
 [connection signal="recording_started" from="Microphone" to="." method="_on_microphone_recording_started"]
 [connection signal="transcription_finished" from="Microphone" to="." method="_on_microphone_transcription_finished"]

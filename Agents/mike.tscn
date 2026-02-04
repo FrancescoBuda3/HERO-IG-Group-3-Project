@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://chqplaunun5ce" path="res://Scripts/agent.gd" id="1_ybbpi"]
 [ext_resource type="PackedScene" uid="uid://bonk2oixf2ofv" path="res://Agents/armature_1_mike.scn" id="11_g67xr"]
+[ext_resource type="Script" uid="uid://b3xted3d554rg" path="res://Scripts/socket_server.gd" id="12_c3yv4"]
 [ext_resource type="Script" uid="uid://bd45xi7aujda8" path="res://Scripts/gaze.gd" id="29_hvihh"]
 [ext_resource type="AnimationLibrary" uid="uid://d3r66hflqrvd7" path="res://Animations/MikeAnimLib.res" id="30_73ath"]
 [ext_resource type="Script" uid="uid://cv2pjmndqi1ur" path="res://Scripts/facial_animation.gd" id="31_5nrqu"]
@@ -69,6 +70,10 @@ script = ExtResource("33_4yn8n")
 script = ExtResource("32_y0fak")
 
 [node name="Armature_1" parent="." unique_id=980500435 instance=ExtResource("11_g67xr")]
+
+[node name="SocketServer" type="Node3D" parent="." unique_id=1903101174]
+process_mode = 4
+script = ExtResource("12_c3yv4")
 
 [connection signal="llm_response_received" from="LLMExchange" to="." method="_on_llm_exchange_llm_response_received"]
 [connection signal="llm_response_received" from="LLMExchange" to="TTSPiper" method="_on_llm_exchange_llm_response_received"]
