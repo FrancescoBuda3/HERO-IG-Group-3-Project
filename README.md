@@ -53,19 +53,25 @@ In this tree, you can see thanks to the small document icon that some nodes are 
 
 > [!IMPORTANT]
 > Communication between the components happens mainly thanks to the **signal** mechanism of Godot. A signal is an event emitted by a node. 
-> 
-> For instance, once the microphone node finishes recording (because the user press the Space Bar), it emits a signal that will be received by the UI component to update the content of the UI labels. You should find in the GDscript code of the node this line :
-> ```python
-> emit_signal("recording_ended")
-> ```
-> Then, it creates a thread to handle the transcription using the Whisper node and once this transcription is done, it emits another signal containing the transcribed text. 
-> ```python
-> emit_signal("transcription_finished",transcription)
-> ``` 
-> The LLMExchange is connected to this second signal and will send it to the LLM etc...
-> Instead of the Inspector on the right, you can click on the Signal tab to diplay which signals of a node are connected to another.
-> ![signals](./img/signals.png)
-> I strongly recommend to open and explore the *.gd* script files attached to these nodes to understand this chain of communication.
+
+For instance, once the microphone node finishes recording (because the user press the Space Bar), it emits a signal that will be received by the UI component to update the content of the UI labels. You should find in the GDscript code of the node this line :
+
+```python
+emit_signal("recording_ended")
+```
+
+Then, it creates a thread to handle the transcription using the Whisper node and once this transcription is done, it emits another signal containing the transcribed text. 
+
+```python
+emit_signal("transcription_finished",transcription)
+``` 
+
+The LLMExchange is connected to this second signal and will send it to the LLM etc...
+Instead of the Inspector on the right, you can click on the Signal tab to diplay which signals of a node are connected to another.
+
+![signals](./img/signals.png)
+
+I strongly recommend to open and explore the *.gd* script files attached to these nodes to understand this chain of communication.
 
 The **mike** node is imported from another *.tscn* file (*mike.tscn*) describing its tree of nodes. You can open this file to see (and modify) its scene. Modifying the *mike.tscn* file will automatically propagate the changes to the *main.tscn* scene since this one imports the **mike** node from this file.
 
