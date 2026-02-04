@@ -38,6 +38,10 @@ The *main.tscn* scene only has a fake background, a Camera, some lighting and ou
 
 The project is quite light and straightforward. It does not compete with other exising agent plaforms such as [Greta](https://github.com/isir/greta), Marc or [VHTK](https://vhtoolkit.ict.usc.edu/) but can be a good playground to manipulate an interactive character.
 
+## Credits
+
+- Emotion recognition from [Omar Ayman](https://github.com/otaha178/Emotion-recognition)
+
 If you use **Mike the Pedagogical Agent** in one of your projects, citing this repository is appreciated.
 
 Copyright. Brian Ravenet
