@@ -10,6 +10,15 @@ This project contains the foundation of a Socially Interactive Agent or Embodied
 It is greatly inspired by other projects such as Greta, Marc and the Virtual Human Toolkit.
 It was not really designed to fully reproduce the capacity of a SIA, but to offer an easy way for students to discover how an agent can work.
 
+For now, the developped functionalities allows the agent to :
+
+- Run a dialog using an external LLM (start and stop recording your voice with the SpaceBar, the agent will then reply).  
+- Follow an object with its gaze (by default, the camera)
+- Perform some pre-rendered animations (downloaded from Mixamo)
+- Do basic lip animation mixed with facial expressions while there is audio playing
+
+The project is quite light and straightforward. It does not compete with other exising agent plaforms such as [Greta](https://github.com/isir/greta), Marc or [VHTK](https://vhtoolkit.ict.usc.edu/) but can be a good playground to manipulate an interactive character.
+
 Actual version uses Avaturn 3D Models.
 
 # Installation
@@ -24,7 +33,7 @@ For the SpeechToText, it uses [Godot Whisper](https://github.com/V-Sekai/godot-w
  (or [here](https://huggingface.co/ggerganov/whisper.cpp/tree/main))
 As a Godot project, you need to add the project in your project's list using Godot "Import" functionality.
 
-# Usage
+# Overview of the project architecture
 
 Once the project opened in Godot, open the *main.tscn* file to load the default *scene*. If you are familiar with Godot, you should get around quite easily.
 
@@ -49,11 +58,16 @@ The **mike** node is imported from another *.tscn* file (*mike.tscn*) describing
 When you click on a node in the tree view on the left of the interface, the inspector on the right automtically display the various properties that are editable on this particular Node. This list of properties depends on the type of Node and on the attached script.
 
 For instance, in the *mike.tscn* scene, clicking on the TTSPiper node lets you change in the inspector the port number.
+
+## Piper-TTS
+
 By default, the agent expects that Piper-TTS is running on your machine and serving a voice model at **http://localhost:5000**. 
 
-To install Piper-TTS, download voices and serve them locally, please have a look at their documentation : [Piper-TTS](https://github.com/OHF-Voice/piper1-gpl)
-
 ![TTSPiper](./img/ttspiperinspector.png)
+
+> [!NOTE]  
+> To install Piper-TTS, download voices and serve them locally, please have a look at their documentation : [Piper-TTS](https://github.com/OHF-Voice/piper1-gpl)
+
 
 ## Whisper
 
@@ -68,18 +82,14 @@ By default, we provide the tiny.en model which is small enough to be fast but is
 
 ## LLMExchange
 
+This is the Node in charge of sending request to the LLM. If you click on the node, you will be able to change various parameters in the inspector.
 
+![LLMExchange](./img/llmexchangeinspector.png)
 
+# Usage
 
-By default, the agent expects that Piper-TTS is serving a voice model at **http://localhost:5000** and that Ollama is serving a *llama3.2:latest* model at **http://localhost:11434**.
-
-The *main.tscn* scene only has a fake background, a Camera, some lighting and our agent. The agent is a Node equipped with custom scripts in order to allow him to :
-- Run a dialog using an external LLM (start and stop recording your voice with the SpaceBar, the agent will then reply).  
-- Follow an object with its gaze (by default, the camera)
-- Perform some pre-rendered animations (downloaded from Mixamo)
-- Do basic lip animation mixed with facial expressions while there is audio playing
-
-The project is quite light and straightforward. It does not compete with other exising agent plaforms such as [Greta](https://github.com/isir/greta), Marc or [VHTK](https://vhtoolkit.ict.usc.edu/) but can be a good playground to manipulate an interactive character.
+For now, the project is supposed to be executed from the Godot Editor (you can always build and export the build if it is more convenient for you).
+You can start the project by clicking on the play button from the Godot Interface. Once the agent is running, you only have to press Space Bar to start recording your voice and press again to stop recording. The agent will process the audio, send the transcription to the LLM, get the response and say it.
 
 ## Credits
 
