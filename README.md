@@ -39,6 +39,8 @@ Once the project opened in Godot, open the *main.tscn* file to load the default 
 
 ![MainGodot](./img/maingodot.png)
 
+## Nodes
+
 > [!IMPORTANT]  
 > In Godot, every game object (including the scene) is organized as a tree of nodes refered to as a *scene*. A Godot *scene* is usually stored within a *.tscn* file that stores this tree. The important thing to understand therefore is that a level is a *scene* and even small game objects are *scenes* in the end. All nodes within the tree inherits from the mother class **Node** but can be from different types.
 
@@ -46,15 +48,29 @@ The main scene tree is composed of various nodes for rendering the main scene (a
 
 ![MainTree](./img/mainscenetree.png)
 
-In this tree, you can see thanks to the small document icon that some nodes are equipped with a script (the **mike** node and the **UI** node for instance). Scripts are written in GDScript and are stored in *.gd* file. A node can receive only one script at max and once a script is attached to a Node, the Godot Engine will automatically call its **_ready** (once at startup) and **_process** (once every frame) functions.
+The **mike** node is imported from another *.tscn* file (*mike.tscn*) describing its tree of nodes. You can open this file to see (and modify) its scene. Modifying the *mike.tscn* file will automatically propagate the changes to the *main.tscn* scene since this one imports the **mike** node from this file.
+
+![MikeTree](./img/mikescenetree.png)
+
+When you click on a node in the tree view on the left of the interface, the inspector on the right automatically display the various properties that are editable on this particular node. This list of properties depends on the type of the node and on its attached script.
+
+For instance, in the *mike.tscn* scene, clicking on the TTSPiper node lets you change in the inspector the port number and the speaker voice ID.
+
+![TTSPiper](./img/ttspiperinspector.png)
+
+## Scripts
+
+In the tree, you can see thanks to the small document icon that some nodes are equipped with a script (the **mike** node and the **UI** node for instance). Scripts are written in GDScript and are stored in *.gd* files. A node can receive only one script at max and once a script is attached to a Node (itself attached to the scene tree), the Godot Engine will automatically call its **_ready** (once at startup) and **_process** (once every frame) functions.
 
 > [!NOTE]  
 > To get familiar with how Godot works, I suggest to explore its [documentation](https://docs.godotengine.org/en/stable/).
 
-> [!IMPORTANT]
-> Communication between the components happens mainly thanks to the **signal** mechanism of Godot. A signal is an event emitted by a node. 
+## Signals
 
-For instance, once the microphone node finishes recording (because the user press the Space Bar), it emits a signal that will be received by the UI component to update the content of the UI labels. You should find in the GDscript code of the node this line :
+> [!IMPORTANT]
+> In **Mike The Pedagogical Agent**, communication between the components happens mainly thanks to the **signal** mechanism of Godot. A signal is an event emitted by a node. 
+
+For instance, once the microphone Node finishes recording (because the user pressed the Space Bar), it emits a signal. You should find in the GDscript code of the Node this line :
 
 ```python
 emit_signal("recording_ended")
@@ -66,26 +82,17 @@ Then, it creates a thread to handle the transcription using the Whisper node and
 emit_signal("transcription_finished",transcription)
 ``` 
 
-The LLMExchange is connected to this second signal and will send it to the LLM etc...
-Instead of the Inspector on the right, you can click on the Signal tab to diplay which signals of a node are connected to another.
+Instead of the Inspector on the right, you can click on the Signal tab to diplay which signals of a Node are connected to another. A connection is made by defining what function on a Node will be called when a signal from another Node is emitted. You should see for instance that when the microphone *transcription_finished* signal is emitted, a function from the LLMExchange Node is called. This function will send the received transcription to the LLM...
+
 
 ![signals](./img/signals.png)
 
-I strongly recommend to open and explore the *.gd* script files attached to these nodes to understand this chain of communication.
+I strongly recommend to open and explore the *.gd* script files attached to these nodes to understand this chain of communication (if you want to understand what is happening under the hood).
 
-The **mike** node is imported from another *.tscn* file (*mike.tscn*) describing its tree of nodes. You can open this file to see (and modify) its scene. Modifying the *mike.tscn* file will automatically propagate the changes to the *main.tscn* scene since this one imports the **mike** node from this file.
-
-![MikeTree](./img/mikescenetree.png)
-
-When you click on a node in the tree view on the left of the interface, the inspector on the right automatically display the various properties that are editable on this particular node. This list of properties depends on the type of the node and on its attached script.
-
-For instance, in the *mike.tscn* scene, clicking on the TTSPiper node lets you change in the inspector the port number and the speaker voice ID.
 
 ## Piper-TTS
 
 By default, the agent expects that Piper-TTS is running on your machine and serving a voice model at **http://localhost:5000**. 
-
-![TTSPiper](./img/ttspiperinspector.png)
 
 > [!NOTE]  
 > To install Piper-TTS, download voices and serve them locally, please have a look at their documentation : [Piper-TTS](https://github.com/OHF-Voice/piper1-gpl).
