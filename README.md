@@ -29,8 +29,8 @@ Mike the PA should work on Linux, Windows and MacOS versions of Godot starting f
 
 For the TextToSpeech, it uses [Piper-TTS](https://github.com/OHF-Voice/piper1-gpl). You can follow their instructions to install Piper-TTS, to download voices and to serve them locally.
 
-For the SpeechToText, it uses [Godot Whisper](https://github.com/V-Sekai/godot-whisper). The default tiny.en model for english is provided but downloading additional (and bigger) language models can be done from [huggingfaces](https://huggingface.co/collections/openai/whisper-release)
- (or [here](https://huggingface.co/ggerganov/whisper.cpp/tree/main))
+For the SpeechToText, it uses [Godot Whisper](https://github.com/V-Sekai/godot-whisper). The default tiny.en model for english is provided but downloading additional (and bigger) language models can be done from [huggingfaces](https://huggingface.co/collections/openai/whisper-release), from [here](https://huggingface.co/ggerganov/whisper.cpp/tree/main) or from the WhisperDock tab in the Godot Editor.
+
 As a Godot project, you need to add the project in your project's list using Godot "Import" functionality.
 
 # Overview of the project architecture
@@ -40,24 +40,29 @@ Once the project opened in Godot, open the *main.tscn* file to load the default 
 ![MainGodot](./img/maingodot.png)
 
 > [!IMPORTANT]  
-> In Godot, every game object (including the scene) is organized as a tree of nodes refered to as a *scene*. A Godot *scene* is usually stored within a *.tscn* file that stores this tree. The important thing to understand is that a level is a *scene* and even small game objects are *scenes*.
+> In Godot, every game object (including the scene) is organized as a tree of nodes refered to as a *scene*. A Godot *scene* is usually stored within a *.tscn* file that stores this tree. The important thing to understand therefore is that a level is a *scene* and even small game objects are *scenes* in the end. All nodes within the tree inherits from the mother class **Node** but can be from different types.
 
-The main scene tree is composed of various nodes for rendering the main scene (a camera, some lighting, backgrounds...) and most importantly, a node for our agent, the **mike** node (by default, we are using the **mike** male agent but there is also a **lara** female agent).
+The main scene tree is composed of various nodes for rendering the main scene (a camera node, some lighting nodes, backgrounds...) and most importantly, a node for our agent, the **mike** node (by default, we are using the **mike** male agent but there is also a **lara** female agent).
 
 ![MainTree](./img/mainscenetree.png)
 
-In this tree, you can see that some nodes are equipped with a script (the **mike** node and the **UI** node for instance). Scripts are written in GDScript and are stored in *.gd* file. A node can receive only one script at max and once a script is attached to a Node, the Godot Engine will automatically call its **_ready** (once at startup) and **_process** (once every frame) functions.
+In this tree, you can see thanks to the small document icon that some nodes are equipped with a script (the **mike** node and the **UI** node for instance). Scripts are written in GDScript and are stored in *.gd* file. A node can receive only one script at max and once a script is attached to a Node, the Godot Engine will automatically call its **_ready** (once at startup) and **_process** (once every frame) functions.
 
 > [!NOTE]  
 > To get familiar with how Godot works, I suggest to explore its [documentation](https://docs.godotengine.org/en/stable/).
+
+> [!IMPORTANT]
+> Communication between the components happens mainly thanks to the signal mechanism of Godot. A signal is an event emitted by a node. For instance, once the microphone node finishes recording (because the user press the Space Bar), it emits a specific signal containing the recorded audio data (this is written in the GDscript code of the node). The Whisper note is connected to this signal (this is declared in the Signal tab of the Godot Editor). It means that a specific event / signal handler is called in the Whisper node script, passing the audio data as parameter. Within this function, the Whisper node process the audio data and then emits a signal containing the resulting text once the transcription is finished. The LLMExchange is connected to this second signal etc...
+> Instead of the Inspector on the right, you can click on the Signal tab to diplay which signals of a node are connected to another.
+> I strongly recommend to open and explore the *.gd* script files attached to these nodes to understand this chain of communication.
 
 The **mike** node is imported from another *.tscn* file (*mike.tscn*) describing its tree of nodes. You can open this file to see (and modify) its scene. Modifying the *mike.tscn* file will automatically propagate the changes to the *main.tscn* scene since this one imports the **mike** node from this file.
 
 ![MikeTree](./img/mikescenetree.png)
 
-When you click on a node in the tree view on the left of the interface, the inspector on the right automtically display the various properties that are editable on this particular Node. This list of properties depends on the type of Node and on the attached script.
+When you click on a node in the tree view on the left of the interface, the inspector on the right automatically display the various properties that are editable on this particular node. This list of properties depends on the type of the node and on its attached script.
 
-For instance, in the *mike.tscn* scene, clicking on the TTSPiper node lets you change in the inspector the port number.
+For instance, in the *mike.tscn* scene, clicking on the TTSPiper node lets you change in the inspector the port number and the speaker voice ID.
 
 ## Piper-TTS
 
@@ -66,8 +71,29 @@ By default, the agent expects that Piper-TTS is running on your machine and serv
 ![TTSPiper](./img/ttspiperinspector.png)
 
 > [!NOTE]  
-> To install Piper-TTS, download voices and serve them locally, please have a look at their documentation : [Piper-TTS](https://github.com/OHF-Voice/piper1-gpl)
+> To install Piper-TTS, download voices and serve them locally, please have a look at their documentation : [Piper-TTS](https://github.com/OHF-Voice/piper1-gpl).
+> Piper-TTS requires Python and it is recommended to create a virtual environment to install and execute Piper-TTS.
+> If you are not familiar with Python virtual environment, I recommend to have a look at [this page](https://docs.python.org/3/library/venv.html).
 
+Below is an example of the commands you should execute to have Piper-TTS serve locally a french voice.
+
+```bash
+# 1) here, I am installing python-virtualenv for creating virtual environment and I create one :
+sudo apt install python-virtualenv
+python -m venv /path/to/new/virtual/environment
+# 2) Now I need to activate it  :
+source /path/to/new/virtual/environment/bin/activate
+# 3) I install piper-tts and flask within the virtual environment :
+
+pip install piper-tts
+pip install flask
+
+# 4) I am downloading a french voice (check Piper-TTS website for the list of available voices) :
+python -m piper.download_voices fr_FR-gilles-low
+
+# 5) I start the Piper-TTS server to serve the voice with :
+python -m piper.http_server -m fr_FR-gilles-low
+```
 
 ## Whisper
 
@@ -85,6 +111,9 @@ By default, we provide the tiny.en model which is small enough to be fast but is
 This is the Node in charge of sending request to the LLM. If you click on the node, you will be able to change various parameters in the inspector.
 
 ![LLMExchange](./img/llmexchangeinspector.png)
+
+> [!NOTE]  
+> By default, this script keeps the conversational turns (user and agent) in a list of 10 elements. This means that each time a request is made to the LLM, a maximum of 9 previous turns are sent as well. This allows the agent to maintain a very short term memory of the conversation.
 
 # Usage
 
