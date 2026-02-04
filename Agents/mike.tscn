@@ -55,7 +55,7 @@ script = ExtResource("33_q5phk")
 
 [node name="LLMExchange" type="Node3D" parent="." unique_id=563992589]
 script = ExtResource("32_g3oek")
-preprompt = "Tu t'appelles Mike, un guide pour les nouveaux étudiants de CentraleSupelec"
+preprompt = "Your name is Mike, your are a tour guide for new students at CentraleSupelec school"
 
 [node name="LLMRequest" type="HTTPRequest" parent="LLMExchange" unique_id=1441263259]
 
