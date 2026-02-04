@@ -140,7 +140,7 @@ By default, we provide the tiny.en model which is small enough to be fast but is
 
 ## LLMExchange
 
-This is the Node in charge of sending request to the LLM. If you click on the node, you will be able to change various parameters in the inspector. By default, the system is configured to send web requests at an Ollama endpoint located at **http://localhost:11434** but this can be modified.
+This is the Node in charge of sending request to the LLM. If you click on the node, you will be able to change various parameters in the inspector. By default, the system is configured to send web requests at an Ollama endpoint located at **http://localhost:11434** but this can be modified. Obviously, it is up to you to ensure you have an LLM instance running there (using Ollama or something else).
 
 ![LLMExchange](./img/llmexchangeinspector.png){width=50%}
 
