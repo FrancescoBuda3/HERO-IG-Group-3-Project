@@ -1,5 +1,5 @@
 extends Node3D
-class_name SocketBlendShapes
+class_name SocketEmotion
 
 # The port we will listen to.
 const PORT:int = 26950
