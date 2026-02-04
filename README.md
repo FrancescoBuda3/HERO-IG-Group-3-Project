@@ -39,7 +39,7 @@ For now, the project is supposed to be executed from the Godot Editor (you can a
 
 You can start the project by clicking on the play button from the Godot Interface. Once the agent is running, you only have to press Space Bar to start recording your voice and press again to stop recording. The agent will process the audio, send the transcription to the LLM, get the response and say it.
 
-By default, the project expects that a Piper-TTS server is running and serving a voice at **http://localhost:5000** and the a Ollama LLM server is running and serving a model at **http://localhost:11434**
+By default, the project expects that a Piper-TTS server is running and serving a voice at **http://localhost:5000** and that a Ollama LLM server is running and serving a model at **http://localhost:11434**
 
 # Overview of the project architecture
 
