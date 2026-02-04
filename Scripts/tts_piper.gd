@@ -1,4 +1,4 @@
-extends Node3D
+extends Node
 @onready var ttsrequest:HTTPRequest = $TTSRequest
 @onready var audioplayer:AudioStreamPlayer3D = $"../AudioStreamPlayer3D"
 

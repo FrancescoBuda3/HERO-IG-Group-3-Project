@@ -1,4 +1,4 @@
-extends Node3D
+extends Node
 
 @onready var audio_player: AudioStreamPlayer3D = $"../AudioStreamPlayer3D"
 @onready var facial_animator:FacialAnimation = $"../FacialAnimation"

@@ -1,4 +1,4 @@
-extends Node3D
+extends Node
 class_name Gaze
 """
 Gestion du regard avec des bones (yeux, tête, colonne)

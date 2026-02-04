@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://chqplaunun5ce" path="res://Scripts/agent.gd" id="1_aqp86"]
 [ext_resource type="PackedScene" uid="uid://c2iquhqdk7tu0" path="res://Agents/armature_1_lara.tscn" id="2_fc4h4"]
+[ext_resource type="Script" uid="uid://b33dhlq843n06" path="res://Scripts/tts_piper.gd" id="4_nd8qi"]
 [ext_resource type="AnimationLibrary" uid="uid://d3r66hflqrvd7" path="res://Animations/MikeAnimLib.res" id="29_aqp86"]
 [ext_resource type="Script" uid="uid://bd45xi7aujda8" path="res://Scripts/gaze.gd" id="30_x3to0"]
 [ext_resource type="Script" uid="uid://cv2pjmndqi1ur" path="res://Scripts/facial_animation.gd" id="31_0yg6i"]
@@ -39,18 +40,21 @@ libraries/MikeAnimLib = ExtResource("29_aqp86")
 tree_root = SubResource("AnimationNodeStateMachine_12wd2")
 anim_player = NodePath("../AnimationPlayer")
 
-[node name="Gaze" type="Node3D" parent="." unique_id=1162966719]
+[node name="TTSPiper" type="Node" parent="." unique_id=998934079]
+script = ExtResource("4_nd8qi")
+
+[node name="TTSRequest" type="HTTPRequest" parent="TTSPiper" unique_id=1984782519]
+
+[node name="Gaze" type="Node" parent="." unique_id=683012553]
 script = ExtResource("30_x3to0")
 
-[node name="FacialAnimation" type="Node3D" parent="." unique_id=995893279]
+[node name="FacialAnimation" type="Node" parent="." unique_id=152124427]
 script = ExtResource("31_0yg6i")
 
-[node name="LLMExchange" type="Node3D" parent="." unique_id=197361111]
+[node name="LLMExchange" type="Node" parent="." unique_id=1552336680]
 script = ExtResource("32_2psej")
 
 [node name="LLMRequest" type="HTTPRequest" parent="LLMExchange" unique_id=1303993346]
-
-[node name="TTSRequest" type="HTTPRequest" parent="LLMExchange" unique_id=1059056312]
 
 [node name="Whisper" type="SpeechToText" parent="." unique_id=1632104370]
 language_model = ExtResource("33_6oit0")
@@ -62,8 +66,10 @@ autoplay = true
 bus = &"Micro"
 script = ExtResource("35_37vsa")
 
-[node name="InputHandler" type="Node3D" parent="." unique_id=1993766451]
+[node name="InputHandler" type="Node" parent="." unique_id=1426645371]
 script = ExtResource("36_lcjvi")
 
+[connection signal="llm_response_received" from="LLMExchange" to="." method="_on_llm_exchange_llm_response_received"]
+[connection signal="llm_response_received" from="LLMExchange" to="TTSPiper" method="_on_llm_exchange_llm_response_received"]
 [connection signal="recording_started" from="Microphone" to="." method="_on_microphone_recording_started"]
 [connection signal="transcription_finished" from="Microphone" to="." method="_on_microphone_transcription_finished"]

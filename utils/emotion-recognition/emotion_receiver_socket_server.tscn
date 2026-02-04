@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" uid="uid://v5v5kkyo2233" path="res://Scripts/emotion_receiver_socket_server.gd" id="1_i5dra"]
 
-[node name="EmotionReceiverSocketServer" type="Node3D" unique_id=594051132]
+[node name="EmotionReceiverSocketServer" type="Node" unique_id=65741571]
 script = ExtResource("1_i5dra")
