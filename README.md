@@ -64,7 +64,7 @@ When you click on a node in the tree view on the left of the interface, the insp
 
 For instance, in the *mike.tscn* scene, clicking on the TTSPiper node lets you change in the inspector the port number and the speaker voice ID.
 
-![TTSPiper](./img/ttspiperinspector.png){width=25%}
+![TTSPiper](./img/ttspiperinspector.png){width=50%}
 
 ## Scripts
 
@@ -93,7 +93,7 @@ emit_signal("transcription_finished",transcription)
 Instead of the Inspector on the right, you can click on the Signal tab to diplay which signals of a Node are connected to another. A connection is made by defining what function on a Node will be called when a signal from another Node is emitted. You should see for instance that when the microphone *transcription_finished* signal is emitted, a function from the LLMExchange Node is called. This function will send the received transcription to the LLM...
 
 
-![signals](./img/signals.png){width=25%}
+![signals](./img/signals.png){width=50%}
 
 I strongly recommend to open and explore the *.gd* script files attached to these nodes to understand this chain of communication (if you want to understand what is happening under the hood).
 
@@ -132,17 +132,17 @@ python -m piper.http_server -m fr_FR-gilles-low
 Whisper is the tool used for realizing Speech To Text. It uses the C++ Wrapper from the Godot extension called [Godot Whisper](https://github.com/V-Sekai/godot-whisper).
 Clicking on the Whisper node allows you to change in the inspector the language that should be detected and which Whisper model it uses.
 
-![Whisper](./img/whisperinspector.png){width=25%}
+![Whisper](./img/whisperinspector.png){width=50%}
 
 By default, we provide the tiny.en model which is small enough to be fast but is limited to english. The *WhisperDock* tab on the top-right of the interface allows you to download bigger models which are multilingual but slower.
 
-![WhisperDock](./img/whisperdownloader.png){width=25%}
+![WhisperDock](./img/whisperdownloader.png){width=50%}
 
 ## LLMExchange
 
 This is the Node in charge of sending request to the LLM. If you click on the node, you will be able to change various parameters in the inspector. By default, the system is configured to send web requests at an Ollama endpoint located at **http://localhost:11434** but this can be modified.
 
-![LLMExchange](./img/llmexchangeinspector.png){width=25%}
+![LLMExchange](./img/llmexchangeinspector.png){width=50%}
 
 > [!NOTE]  
 > By default, this script keeps the conversational turns (user and agent) in a list of 10 elements. This means that each time a request is made to the LLM, a maximum of 9 previous turns are sent as well. This allows the agent to maintain a very short term memory of the conversation.
