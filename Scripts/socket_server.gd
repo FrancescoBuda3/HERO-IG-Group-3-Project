@@ -46,7 +46,9 @@ func _process(_delta):
 					var packet_text:String = packet.get_string_from_utf8()
 					#print("< Got text data from peer %d: %s ... echoing" % [peer_id, packet_text])
 					if packet_text != null:
-						facialAnimation.setBlendShapesFromSocket(JSON.parse_string(packet_text)["categories"])
+						var parsed_message = JSON.parse_string(packet_text)["categories"]
+						if parsed_message != null:
+							facialAnimation.setBlendShapesFromSocket(parsed_message)
 		elif peer_state == WebSocketPeer.STATE_CLOSED:
 			# Remove the disconnected peer.
 			_peers.erase(peer_id)

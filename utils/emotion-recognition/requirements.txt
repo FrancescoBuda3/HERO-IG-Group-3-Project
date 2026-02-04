@@ -1,0 +1,7 @@
+websockets==15.0.1
+opencv_python==4.13.0.90
+Keras==2.3.1
+pandas==0.25.3
+numpy==1.17.4
+imutils==0.5.3
+scikit_learn==0.22.1
