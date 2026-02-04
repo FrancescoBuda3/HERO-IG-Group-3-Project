@@ -26,7 +26,50 @@ As a Godot project, you need to add the project in your project's list using God
 
 # Usage
 
-Once the project opened in Godot, open the *main.tscn* file to load the default scene. If you are familiar with Godot, you should get around quite easily.
+Once the project opened in Godot, open the *main.tscn* file to load the default *scene*. If you are familiar with Godot, you should get around quite easily.
+
+![MainGodot](./img/maingodot.png)
+
+> [!IMPORTANT]  
+> In Godot, every game object (including the scene) is organized as a tree of nodes refered to as a *scene*. A Godot *scene* is usually stored within a *.tscn* file that stores this tree. The important thing to understand is that a level is a *scene* and even small game objects are *scenes*.
+
+The main scene tree is composed of various nodes for rendering the main scene (a camera, some lighting, backgrounds...) and most importantly, a node for our agent, the **mike** node (by default, we are using the **mike** male agent but there is also a **lara** female agent).
+
+![MainTree](./img/mainscenetree.png)
+
+In this tree, you can see that some nodes are equipped with a script (the **mike** node and the **UI** node for instance). Scripts are written in GDScript and are stored in *.gd* file. A node can receive only one script at max and once a script is attached to a Node, the Godot Engine will automatically call its **_ready** (once at startup) and **_process** (once every frame) functions.
+
+> [!NOTE]  
+> To get familiar with how Godot works, I suggest to explore its [documentation](https://docs.godotengine.org/en/stable/).
+
+The **mike** node is imported from another *.tscn* file (*mike.tscn*) describing its tree of nodes. You can open this file to see (and modify) its scene. Modifying the *mike.tscn* file will automatically propagate the changes to the *main.tscn* scene since this one imports the **mike** node from this file.
+
+![MikeTree](./img/mikescenetree.png)
+
+When you click on a node in the tree view on the left of the interface, the inspector on the right automtically display the various properties that are editable on this particular Node. This list of properties depends on the type of Node and on the attached script.
+
+For instance, in the *mike.tscn* scene, clicking on the TTSPiper node lets you change in the inspector the port number.
+By default, the agent expects that Piper-TTS is running on your machine and serving a voice model at **http://localhost:5000**. 
+
+To install Piper-TTS, download voices and serve them locally, please have a look at their documentation : [Piper-TTS](https://github.com/OHF-Voice/piper1-gpl)
+
+![TTSPiper](./img/ttspiperinspector.png)
+
+## Whisper
+
+Whisper is the tool used for realizing Speech To Text. It uses the C++ Wrapper from the Godot extension called [Godot Whisper](https://github.com/V-Sekai/godot-whisper).
+Clicking on the Whisper node allows you to change in the inspector the language that should be detected and which Whisper model it uses.
+
+![Whisper](./img/whisperinspector.png)
+
+By default, we provide the tiny.en model which is small enough to be fast but is limited to english. The *WhisperDock* tab on the top-right of the interface allows you to download bigger models which are multilingual but slower.
+
+![WhisperDock](./img/whisperdownloader.png)
+
+## LLMExchange
+
+
+
 
 By default, the agent expects that Piper-TTS is serving a voice model at **http://localhost:5000** and that Ollama is serving a *llama3.2:latest* model at **http://localhost:11434**.
 
