@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bep3l8ru03jun"]
+
+[ext_resource type="Script" uid="uid://b3xted3d554rg" path="res://Scripts/socket_server.gd" id="1_phf8g"]
+
+[node name="BlendShapeSocketServer" type="Node3D" unique_id=1972091751]
+script = ExtResource("1_phf8g")
