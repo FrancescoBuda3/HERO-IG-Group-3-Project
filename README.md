@@ -33,6 +33,14 @@ For the SpeechToText, it uses [Godot Whisper](https://github.com/V-Sekai/godot-w
 
 As a Godot project, you need to add the project in your project's list using Godot "Import" functionality.
 
+# Usage
+
+For now, the project is supposed to be executed from the Godot Editor (you can always build and export the build if it is more convenient for you).
+
+You can start the project by clicking on the play button from the Godot Interface. Once the agent is running, you only have to press Space Bar to start recording your voice and press again to stop recording. The agent will process the audio, send the transcription to the LLM, get the response and say it.
+
+By default, the project expects that a Piper-TTS server is running and serving a voice at **http://localhost:5000** and the a Ollama LLM server is running and serving a model at **http://localhost:11434**
+
 # Overview of the project architecture
 
 Once the project opened in Godot, open the *main.tscn* file to load the default *scene*. If you are familiar with Godot, you should get around quite easily.
@@ -132,17 +140,12 @@ By default, we provide the tiny.en model which is small enough to be fast but is
 
 ## LLMExchange
 
-This is the Node in charge of sending request to the LLM. If you click on the node, you will be able to change various parameters in the inspector.
+This is the Node in charge of sending request to the LLM. If you click on the node, you will be able to change various parameters in the inspector. By default, the system is configured to send web requests at an Ollama endpoint located at **http://localhost:11434** but this can be modified.
 
 ![LLMExchange](./img/llmexchangeinspector.png)
 
 > [!NOTE]  
 > By default, this script keeps the conversational turns (user and agent) in a list of 10 elements. This means that each time a request is made to the LLM, a maximum of 9 previous turns are sent as well. This allows the agent to maintain a very short term memory of the conversation.
-
-# Usage
-
-For now, the project is supposed to be executed from the Godot Editor (you can always build and export the build if it is more convenient for you).
-You can start the project by clicking on the play button from the Godot Interface. Once the agent is running, you only have to press Space Bar to start recording your voice and press again to stop recording. The agent will process the audio, send the transcription to the LLM, get the response and say it.
 
 ## Credits
 
