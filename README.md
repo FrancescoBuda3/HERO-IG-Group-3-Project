@@ -40,6 +40,8 @@ The project is quite light and straightforward. It does not compete with other e
 
 ## Credits
 
+- TextToSpeech from [Piper-TTS](https://github.com/OHF-Voice/piper1-gpl)
+- SpeechToText from [Godot Whisper](https://github.com/V-Sekai/godot-whisper)
 - Emotion recognition from [Omar Ayman](https://github.com/otaha178/Emotion-recognition)
 
 If you use **Mike the Pedagogical Agent** in one of your projects, citing this repository is appreciated.
