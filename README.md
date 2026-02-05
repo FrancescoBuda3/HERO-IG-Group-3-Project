@@ -73,14 +73,14 @@ For instance, in the *mike.tscn* scene, clicking on the TTSPiper node lets you c
 > [!IMPORTANT]The workflow is like this:
 >
 > - The **InputHandler** Node of the **mike** node is equipped with a script waiting for input events.
-> - When the *Space Bar* is (pressed and) released, the **InputHandler** calls on the **Microphone** Node script a method that will start the recording of the user voice (this method also send a signal to update the UI).
+> - When the *Space Bar* is (pressed and) released, the **InputHandler** calls on the **Microphone** Node script a method that will start the recording of the user voice (this method also sends a signal to update the UI).
 > - When the *Space Bar* is (pressed and) released again, the **InputHandler** calls on the **Microphone** the same method that will stop the recording this time and calls a method on the **Whisper** Node to transcribe the audio (it also sends a signal to update the UI again).
 > - Once the **Whisper** Node finishes the transcription, it sends a signal with the transcription that will be received by the **LLMExchange** Node.
-> - Upon reception of this signal, the **LLMExchange** Node update the conversation list and use a web request to send it to the LLM instance (by default, an Ollama running at http://localhost:11434)
-> - The **LLMExchange** Node receives the response from the LLM, update the conversation list and sends a signal with the response that will be received by the **TTSPiper** Node
+> - Upon reception of this signal, the **LLMExchange** Node updates the conversation list and uses a web request to send it to the LLM instance (by default, an Ollama running at http://localhost:11434)
+> - The **LLMExchange** Node receives the response from the LLM, updates the conversation list and sends a signal with the response that will be received by the **TTSPiper** Node
 > - Upon reception of this signal, the **TTSPiper** Node sends a web request to the Piper-TTS instance (running by default at http://localhost:5000)
-> - The **TTSPiper** Node receives the response with the AudioData and make the **AudioStreamPlayer3D** plays this audio.
-> - The **FaceAnimation** is constantly observing if there is audio playing from the agent. When the audio is playing, this Node perform lip animation on the agent viseme blenshapes.
+> - The **TTSPiper** Node receives the response with the AudioData and makes the **AudioStreamPlayer3D** plays this audio.
+> - The **FaceAnimation** is constantly observing if there is audio playing from the agent. When the audio is playing, this Node performs lip animation on the agent viseme blenshapes.
 
 <details>
 <summary>
