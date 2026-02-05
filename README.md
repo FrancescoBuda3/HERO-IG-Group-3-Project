@@ -82,7 +82,6 @@ For instance, in the *mike.tscn* scene, clicking on the TTSPiper node lets you c
 > - The **TTSPiper** Node receives the response with the AudioData and make the **AudioStreamPlayer3D** plays this audio.
 > - The **FaceAnimation** is constantly observing if there is audio playing from the agent. When the audio is playing, this Node perform lip animation on the agent viseme blenshapes.
 
-
 <details>
 <summary>
 
@@ -96,7 +95,12 @@ In the tree, you can see thanks to the small document icon that some nodes are e
 > To get familiar with how Godot works, I suggest to explore its [documentation](https://docs.godotengine.org/en/stable/).
 
 </details>
+<details>
+<summary>
+
 ## Signals
+
+</summary>
 
 > [!IMPORTANT]
 > In **Mike The Pedagogical Agent**, communication between the components happens mainly thanks to the **signal** mechanism of Godot. A signal is an event emitted by a node. 
@@ -120,8 +124,13 @@ Instead of the Inspector on the right, you can click on the Signal tab to diplay
 
 I strongly recommend to open and explore the *.gd* script files attached to these nodes to understand this chain of communication (if you want to understand what is happening under the hood).
 
+</details>
+<details>
+<summary>
 
 ## Piper-TTS
+
+</summary>
 
 By default, the agent expects that Piper-TTS is running on your machine and serving a voice model at **http://localhost:5000**. 
 
@@ -150,7 +159,13 @@ python -m piper.download_voices fr_FR-gilles-low
 python -m piper.http_server -m fr_FR-gilles-low
 ```
 
+</details>
+<details>
+<summary>
+
 ## Whisper
+
+</summary>
 
 Whisper is the tool used for realizing Speech To Text. It uses the C++ Wrapper from the Godot extension called [Godot Whisper](https://github.com/V-Sekai/godot-whisper).
 Clicking on the Whisper node allows you to change in the inspector the language that should be detected and which Whisper model it uses.
@@ -161,7 +176,13 @@ By default, we provide the tiny.en model which is small enough to be fast but is
 
 ![WhisperDock](./img/whisperdownloader.png){width=50%}
 
+</details>
+<details>
+<summary>
+
 ## LLMExchange
+
+</summary>
 
 This is the Node in charge of sending request to the LLM. If you click on the node, you will be able to change various parameters in the inspector. By default, the system is configured to send web requests at an Ollama endpoint located at **http://localhost:11434** but this can be modified. Obviously, it is up to you to ensure you have an LLM instance running there (using Ollama or something else).
 
@@ -169,6 +190,8 @@ This is the Node in charge of sending request to the LLM. If you click on the no
 
 > [!NOTE]  
 > By default, this script keeps the conversational turns (user and agent) in a list of 10 elements. This means that each time a request is made to the LLM, a maximum of 9 previous turns are sent as well. This allows the agent to maintain a very short term memory of the conversation.
+
+</details>
 
 # Credits
 
