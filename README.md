@@ -27,7 +27,10 @@ You can clone the current project using your favorite Git Client or you can down
 
 Mike the PA should work on Linux, Windows and MacOS versions of Godot starting from version 4.6.
 
-For the TextToSpeech, it uses [Piper-TTS](https://github.com/OHF-Voice/piper1-gpl). You can follow their instructions to install Piper-TTS, to download voices and to serve them locally.
+For the TextToSpeech, it uses [Piper-TTS](https://github.com/OHF-Voice/piper1-gpl). You can follow their instructions to install Piper-TTS, to download voices and to serve them locally. 
+
+> [!NOTE]
+> The project can also use the Godot integrated TTS. This solution wraps the Operating System TTS on which Godot is running. Therefore, depending on your Operating System, you might have various results since available voices will depend on your setup.
 
 For the SpeechToText, it uses [Godot Whisper](https://github.com/V-Sekai/godot-whisper). The default tiny.en model for english is provided but downloading additional (and bigger) language models can be done from [huggingfaces](https://huggingface.co/collections/openai/whisper-release), from [here](https://huggingface.co/ggerganov/whisper.cpp/tree/main) or from the WhisperDock tab in the Godot Editor.
 
@@ -35,15 +38,16 @@ As a Godot project, you need to add the project in your project's list using God
 
 # Usage
 
-For now, the project is supposed to be executed from the Godot Editor (you can always build and export the build if it is more convenient for you).
+For now, the project is supposed to be executed from the Godot Editor (you can always build and export it if it is more convenient for you).
 
 You can start the project by clicking on the play button from the Godot Interface. Once the agent is running, you only have to press Space Bar to start recording your voice and press again to stop recording. The agent will process the audio, send the transcription to the LLM, get the response and say it.
 
 By default, the project expects that a Piper-TTS server is running and serving a voice at **http://localhost:5000** and that a Ollama LLM server is running and serving a model at **http://localhost:11434**
 
+
 # Overview of the project architecture
 
-Once the project opened in Godot, open the *main.tscn* file to load the default *scene*. If you are familiar with Godot, you should get around quite easily.
+Once the project opened in Godot, open the *main.tscn* file to open the default *scene*. If you are familiar with Godot, you should get around quite easily.
 
 ![MainGodot](./img/maingodot.png){width=75%}
 
@@ -62,17 +66,32 @@ The **mike** node is imported from another *.tscn* file (*mike.tscn*) describing
 
 When you click on a node in the tree view on the left of the interface, the inspector on the right automatically display the various properties that are editable on this particular node. This list of properties depends on the type of the node and on its attached script.
 
-For instance, in the *mike.tscn* scene, clicking on the TTSPiper node lets you change in the inspector the port number and the speaker voice ID.
+For instance, in the *mike.tscn* scene, clicking on the TTSPiper node lets you change in the inspector the port number and the speaker voice ID (you can also tick the box to use the OS TTS instead of Piper-TTS).
 
 ![TTSPiper](./img/ttspiperinspector.png){width=50%}
 
-## Scripts
+> [!IMPORTANT]The workflow is like this:
+>
+> - The **InputHandler** Node of the **mike** node is equipped with a script waiting for input events.
+> - When the *Space Bar* is (pressed and) released, the **InputHandler** calls on the **Microphone** Node script a method that will start the recording of the user voice (this method also send a signal to update the UI).
+> - When the *Space Bar* is (pressed and) released again, the **InputHandler** calls on the **Microphone** the same method that will stop the recording this time and calls a method on the **Whisper** Node to transcribe the audio (it also sends a signal to update the UI again).
+> - Once the **Whisper** Node finishes the transcription, it sends a signal with the transcription that will be received by the **LLMExchange** Node.
+> - Upon reception of this signal, the **LLMExchange** Node update the conversation list and use a web request to send it to the LLM instance (by default, an Ollama running at http://localhost:11434)
+> - The **LLMExchange** Node receives the response from the LLM, update the conversation list and sends a signal with the response that will be received by the **TTSPiper** Node
+> - Upon reception of this signal, the **TTSPiper** Node sends a web request to the Piper-TTS instance (running by default at http://localhost:5000)
+> - The **TTSPiper** Node receives the response with the AudioData and make the **AudioStreamPlayer3D** plays this audio.
+> - The **FaceAnimation** is constantly observing if there is audio playing from the agent. When the audio is playing, this Node perform lip animation on the agent viseme blenshapes.
 
-In the tree, you can see thanks to the small document icon that some nodes are equipped with a script (the **mike** node and the **UI** node for instance). Scripts are written in GDScript and are stored in *.gd* files. A node can receive only one script at max and once a script is attached to a Node (itself attached to the scene tree), the Godot Engine will automatically call its **_ready** (once at startup) and **_process** (once every frame) functions.
+
+<details>
+<summary>## Scripts</summary>
+
+In the tree, you can see thanks to the small document icon that some nodes are equipped with a script (the **mike** node and the **UI** node for instance). Scripts are written in GDScript and are stored in *.gd* files. A node can receive only one script at a time and once a script is attached to a Node (itself attached to the scene tree), the Godot Engine will automatically call its **_ready** (once at startup) and **_process** (once every frame) functions.
 
 > [!NOTE]  
 > To get familiar with how Godot works, I suggest to explore its [documentation](https://docs.godotengine.org/en/stable/).
 
+</details>
 ## Signals
 
 > [!IMPORTANT]
@@ -147,7 +166,7 @@ This is the Node in charge of sending request to the LLM. If you click on the no
 > [!NOTE]  
 > By default, this script keeps the conversational turns (user and agent) in a list of 10 elements. This means that each time a request is made to the LLM, a maximum of 9 previous turns are sent as well. This allows the agent to maintain a very short term memory of the conversation.
 
-## Credits
+# Credits
 
 - TextToSpeech from [Piper-TTS](https://github.com/OHF-Voice/piper1-gpl)
 - SpeechToText from [Godot Whisper](https://github.com/V-Sekai/godot-whisper)
