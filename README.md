@@ -84,7 +84,11 @@ For instance, in the *mike.tscn* scene, clicking on the TTSPiper node lets you c
 
 
 <details>
-<summary>## Scripts</summary>
+<summary>
+
+## Scripts
+
+</summary>
 
 In the tree, you can see thanks to the small document icon that some nodes are equipped with a script (the **mike** node and the **UI** node for instance). Scripts are written in GDScript and are stored in *.gd* files. A node can receive only one script at a time and once a script is attached to a Node (itself attached to the scene tree), the Godot Engine will automatically call its **_ready** (once at startup) and **_process** (once every frame) functions.
 
