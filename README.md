@@ -27,7 +27,7 @@ You can clone the current project using your favorite Git Client or you can down
 
 Mike the PA should work on Linux, Windows and MacOS versions of Godot starting from version 4.6.
 
-For the TextToSpeech, it uses [Piper-TTS](https://github.com/OHF-Voice/piper1-gpl). You can follow their instructions to install Piper-TTS, to download voices and to serve them locally. Mike The PA expects Piper-TTS version 1.8.0 running with Python 3.14.10 (this recent version uses an endpoint like "http://localhost:5000/synthesize").
+For the TextToSpeech, it uses [Piper-TTS](https://github.com/OHF-Voice/piper1-gpl). You can follow their instructions to install Piper-TTS, to download voices and to serve them locally. Mike The PA expects Piper-TTS version 1.8.0 running with Python 3.14.10 (this recent version uses an endpoint like **http://localhost:5000/synthesize**).
  
 
 > [!NOTE]
@@ -43,7 +43,7 @@ For now, the project is supposed to be executed from the Godot Editor (you can a
 
 You can start the project by clicking on the play button from the Godot Interface. Once the agent is running, you only have to press Space Bar to start recording your voice and press again to stop recording. The agent will process the audio, send the transcription to the LLM, get the response and say it.
 
-By default, the project expects that a Piper-TTS server is running and serving a voice at **http://localhost:5000** and that a Ollama LLM server is running and serving a model at **http://localhost:11434**. It is also possible to use an OpenWebUI endpoint by changing a few parameters of the agent components. 
+By default, the project expects that a Piper-TTS server is running and serving a voice at **http://localhost:5000/synthesize** and that a Ollama LLM server is running and serving a model at **http://localhost:11434**. It is also possible to use an OpenWebUI endpoint by changing a few parameters of the agent components. 
 
 
 # Overview of the project architecture
@@ -79,7 +79,7 @@ For instance, in the *mike.tscn* scene, clicking on the TTSPiper node lets you c
 > - Once the **Whisper** Node finishes the transcription, it sends a signal with the transcription that will be received by the **LLMExchange** Node.
 > - Upon reception of this signal, the **LLMExchange** Node updates the conversation list and uses a web request to send it to the LLM instance (by default, an Ollama running at http://localhost:11434)
 > - The **LLMExchange** Node receives the response from the LLM, updates the conversation list and sends a signal with the response that will be received by the **TTSPiper** Node
-> - Upon reception of this signal, the **TTSPiper** Node sends a web request to the Piper-TTS instance (running by default at http://localhost:5000)
+> - Upon reception of this signal, the **TTSPiper** Node sends a web request to the Piper-TTS instance (running by default at http://localhost:5000/synthesize)
 > - The **TTSPiper** Node receives the response with the AudioData and makes the **AudioStreamPlayer3D** plays this audio.
 > - The **FaceAnimation** is constantly observing if there is audio playing from the agent. When the audio is playing, this Node performs lip animation on the agent viseme blenshapes.
 
@@ -133,7 +133,7 @@ I strongly recommend to open and explore the *.gd* script files attached to thes
 
 </summary>
 
-By default, the agent expects that Piper-TTS is running on your machine and serving a voice model at **http://localhost:5000**. 
+By default, the agent expects that Piper-TTS is running on your machine and serving a voice model at **http://localhost:5000/synthesize**. 
 
 > [!NOTE]  
 > To install Piper-TTS, download voices and serve them locally, please have a look at their documentation : [Piper-TTS](https://github.com/OHF-Voice/piper1-gpl).
