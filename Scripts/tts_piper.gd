@@ -9,12 +9,13 @@ extends Node
 @export var local_tts_language:String = "en"
 @export var local_tts_voice_id = 0
 var voices:PackedStringArray
-var voice_id:String
+var voice_id:String = "None"
 
 func _ready() -> void:
 	ttsrequest.request_completed.connect(_on_ttsrequest_completed)
-	voices = DisplayServer.tts_get_voices_for_language(local_tts_language)
-	voice_id = voices[local_tts_voice_id]
+	if use_local_tts_instead:
+		voices = DisplayServer.tts_get_voices_for_language(local_tts_language)
+		voice_id = voices[local_tts_voice_id]
 
 func sanitize_text(text: String) -> String:
 	var regex_quotes:RegEx = RegEx.new()
@@ -42,7 +43,7 @@ func request_tts(text: String) -> void:
 	        "Content-Type: application/json"
 		]
 
-		var url:String = "http://localhost:%d" % piper_port
+		var url:String = "http://localhost:%d/synthesize" % piper_port
 
 		var err:Error = ttsrequest.request(
 			url,

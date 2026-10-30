@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://buks0gs6a2ujx"]
 
 [ext_resource type="Script" uid="uid://chqplaunun5ce" path="res://Scripts/agent.gd" id="1_ybbpi"]
+[ext_resource type="WhisperResource" uid="uid://bv3mb84jil46y" path="res://addons/godot_whisper/models/ggml-tiny.bin" id="6_g67xr"]
 [ext_resource type="PackedScene" uid="uid://bonk2oixf2ofv" path="res://Agents/armature_1_mike.scn" id="11_g67xr"]
 [ext_resource type="Script" uid="uid://bd45xi7aujda8" path="res://Scripts/gaze.gd" id="29_hvihh"]
 [ext_resource type="AnimationLibrary" uid="uid://d3r66hflqrvd7" path="res://Animations/MikeAnimLib.res" id="30_73ath"]
@@ -9,7 +10,6 @@
 [ext_resource type="Script" uid="uid://rhn3cgjgsjft" path="res://Scripts/llm_exchange.gd" id="32_g3oek"]
 [ext_resource type="Script" uid="uid://bf5jckydsw4d0" path="res://Scripts/input_handler.gd" id="32_y0fak"]
 [ext_resource type="Script" uid="uid://cos1ts5j54v0o" path="res://Scripts/microphone.gd" id="33_4yn8n"]
-[ext_resource type="WhisperResource" uid="uid://cnjdqrlhhnsrw" path="res://addons/godot_whisper/models/gglm-tiny.en.bin" id="33_83x36"]
 [ext_resource type="Script" uid="uid://c6irhk5md8qit" path="res://Scripts/whisper.gd" id="33_q5phk"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ybbpi"]
@@ -50,12 +50,13 @@ script = ExtResource("32_83x36")
 [node name="TTSRequest" type="HTTPRequest" parent="TTSPiper" unique_id=457489109]
 
 [node name="Whisper" type="SpeechToText" parent="." unique_id=1645439451]
-language_model = ExtResource("33_83x36")
+language = 7
+language_model = ExtResource("6_g67xr")
 script = ExtResource("33_q5phk")
 
 [node name="LLMExchange" type="Node" parent="." unique_id=398703034]
 script = ExtResource("32_g3oek")
-preprompt = "Your name is Mike, your are a tour guide for new students at CentraleSupelec school"
+preprompt = "Tu t'appelles Mike et tu es un guide pour les étudiants STAPS qui visitent le laboratoire LISN"
 
 [node name="LLMRequest" type="HTTPRequest" parent="LLMExchange" unique_id=1441263259]
 

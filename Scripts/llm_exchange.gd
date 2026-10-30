@@ -2,6 +2,8 @@ extends Node
 class_name LLMExchange
 
 @onready var llmrequest:HTTPRequest = $LLMRequest
+@onready var facial_animator:FacialAnimation = $"../FacialAnimation"
+
 signal llm_response_received
 
 enum EndPoint {
