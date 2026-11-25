@@ -35,6 +35,9 @@ func get_api_key() -> String:
 # OpenRouter only: models tried in order if modelName is rate-limited or fails
 @export var fallbackModels:PackedStringArray = []
 @export var APIkey:String = ""
+# System prompt: read from this file at every turn (edit it, no restart needed).
+# If the file is missing or empty, the multiline text below is used instead.
+@export_file("*.md", "*.txt") var preprompt_file:String = "res://prompt.md"
 @export_multiline var preprompt:String = ""
 
 @export var numberOfTurn = 10
@@ -44,8 +47,18 @@ func get_api_key() -> String:
 func _ready() -> void:
 	llmrequest.request_completed.connect(_on_llmrequest_completed)
 	
+func get_preprompt() -> String:
+	if preprompt_file != "" and FileAccess.file_exists(preprompt_file):
+		var text:String = FileAccess.get_file_as_string(preprompt_file).strip_edges()
+		if text != "":
+			return text
+		push_warning("%s is empty, using the preprompt property instead" % preprompt_file)
+	elif preprompt_file != "":
+		push_warning("%s not found, using the preprompt property instead" % preprompt_file)
+	return preprompt
+
 func nextturn()->void:
-	var jsonpreprompt:Dictionary = {"role":"system","content":preprompt}
+	var jsonpreprompt:Dictionary = {"role":"system","content":get_preprompt()}
 	var jsonfullconv:Array = [jsonpreprompt]
 	jsonfullconv.append_array(conversationList)
 	var jsondata:Dictionary = {"model":modelName,"messages":jsonfullconv,"stream":false}
@@ -88,6 +101,27 @@ func send_LLM_request(finalurl:String,json: String) -> void:
 	if error != OK:
 		push_error("Error while sending request: %s" % error)
 	
+# Prints which model answered and its reasoning, when the model provides it.
+# OpenRouter/OpenWebUI use message.reasoning, Ollama uses message.thinking.
+func print_llm_details(response_data:Dictionary) -> void:
+	var message:Dictionary = {}
+	if response_data.has("message") and typeof(response_data["message"]) == TYPE_DICTIONARY:
+		message = response_data["message"]
+	elif response_data.has("choices") and not response_data["choices"].is_empty():
+		message = response_data["choices"][0].get("message", {})
+	if response_data.has("model"):
+		print("[LLM model] ", response_data["model"])
+	var reasoning:String = ""
+	for key in ["reasoning", "reasoning_content", "thinking"]:
+		if message.has(key) and message[key] != null and str(message[key]).strip_edges() != "":
+			reasoning = str(message[key])
+			break
+	if reasoning != "":
+		print("[LLM reasoning] ", reasoning)
+	else:
+		print("[LLM reasoning] (none returned by this model)")
+	print("[LLM answer] ", message.get("content", ""))
+
 func _on_llmrequest_completed(
 	result: int,
 	_response_code: int,
@@ -107,6 +141,7 @@ func _on_llmrequest_completed(
 		push_error("LLM error: %s" % str(response_data["error"]))
 		return
 	var response:String
+	print_llm_details(response_data)
 	if endPoint == EndPoint.Ollama:
 		response = response_data["message"]["content"]
 	elif endPoint == EndPoint.OpenWebUI or endPoint == EndPoint.OpenRouter:

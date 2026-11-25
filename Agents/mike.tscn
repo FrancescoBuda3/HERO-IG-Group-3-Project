@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://buks0gs6a2ujx"]
 
 [ext_resource type="Script" uid="uid://chqplaunun5ce" path="res://Scripts/agent.gd" id="1_ybbpi"]
-[ext_resource type="WhisperResource" uid="uid://bv3mb84jil46y" path="res://addons/godot_whisper/models/ggml-tiny.bin" id="6_g67xr"]
+[ext_resource type="WhisperResource" uid="uid://cnjdqrlhhnsrw" path="res://addons/godot_whisper/models/gglm-tiny.en.bin" id="6_g67xr"]
 [ext_resource type="PackedScene" uid="uid://bonk2oixf2ofv" path="res://Agents/armature_1_mike.scn" id="11_g67xr"]
 [ext_resource type="Script" uid="uid://bd45xi7aujda8" path="res://Scripts/gaze.gd" id="29_hvihh"]
 [ext_resource type="AnimationLibrary" uid="uid://d3r66hflqrvd7" path="res://Animations/MikeAnimLib.res" id="30_73ath"]
@@ -59,7 +59,6 @@ script = ExtResource("32_g3oek")
 endPoint = 2
 modelName = "inclusionai/ling-3.2-flash:free"
 fallbackModels = PackedStringArray("google/gemma-4-31b-it:free", "nvidia/nemotron-3-ultra-550b-a55b:free")
-preprompt = "Your name is Mike and you are a friendly guide for sports science (STAPS) students visiting the LISN laboratory. Always answer in English. Keep your answers short (2-3 sentences maximum) because they are read aloud by a text-to-speech voice. Do not use lists, emojis, markdown or special formatting."
 
 [node name="LLMRequest" type="HTTPRequest" parent="LLMExchange" unique_id=1441263259]
 

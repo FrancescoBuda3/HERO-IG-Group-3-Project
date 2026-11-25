@@ -62,24 +62,37 @@ fi
 echo
 echo "== 2/3 Piper TTS (voce $VOICE, porta $PORT) =="
 
-if lsof -iTCP:"$PORT" -sTCP:LISTEN -n -P >/dev/null 2>&1; then
-  echo "La porta $PORT è già in uso, assumo che Piper sia già attivo."
-else
+piper_ready() {
+  curl -s -m 3 -o /dev/null -X POST "http://localhost:$PORT/synthesize" \
+    -H 'Content-Type: application/json' -d '{"text":"ok"}'
+}
+
+start_piper() {
   "$PY" -m piper.http_server -m "$VOICE" --port "$PORT" > /tmp/mike_piper.log 2>&1 &
   PIPER_PID=$!
   for i in $(seq 1 30); do
-    if curl -s -m 2 -o /dev/null -X POST "http://localhost:$PORT/synthesize" \
-         -H 'Content-Type: application/json' -d '{"text":"ok"}'; then
+    if piper_ready; then
       echo "Piper pronto (pid $PIPER_PID)"
-      break
+      return 0
     fi
     if ! kill -0 "$PIPER_PID" 2>/dev/null; then
       echo "ERRORE: Piper si è fermato. Log:"
       cat /tmp/mike_piper.log
-      exit 1
+      return 1
     fi
     sleep 1
   done
+  return 1
+}
+
+if piper_ready; then
+  echo "Piper già attivo sulla porta $PORT, lo uso."
+elif lsof -iTCP:"$PORT" -sTCP:LISTEN -n -P >/dev/null 2>&1; then
+  echo "ERRORE: la porta $PORT è occupata da un altro programma che non è Piper:"
+  lsof -iTCP:"$PORT" -sTCP:LISTEN -n -P
+  exit 1
+else
+  start_piper || exit 1
 fi
 
 echo
@@ -94,8 +107,12 @@ fi
 
 echo
 echo "Mike è pronto. Lascia aperto questo terminale; Ctrl+C per chiudere Piper."
-if [ -n "$PIPER_PID" ]; then
-  wait "$PIPER_PID"
-else
-  while true; do sleep 3600; done
-fi
+# Controlla Piper ogni 5 secondi e lo riavvia se si ferma
+while true; do
+  sleep 5
+  if ! piper_ready; then
+    echo "$(date +%H:%M:%S) Piper non risponde, lo riavvio..."
+    [ -n "$PIPER_PID" ] && kill "$PIPER_PID" 2>/dev/null
+    start_piper || echo "Riavvio fallito, riprovo tra poco."
+  fi
+done

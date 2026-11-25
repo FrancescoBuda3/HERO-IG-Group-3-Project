@@ -15,21 +15,33 @@ var is_transcribing:bool = false
 
 var thread : Thread
 
-func downsample_48k_to_16k(pcm_48k: PackedByteArray) -> PackedByteArray:
+var recording_rate:int = 48000
+
+# Resamples mono 16-bit PCM from src_rate (the real recording rate, usually 44100
+# or 48000 depending on the system) to the 16000 Hz that Whisper expects.
+func downsample_to_16k(pcm: PackedByteArray, src_rate: int) -> PackedByteArray:
 	var pcm_16k:PackedByteArray = PackedByteArray()
-
-	# 2 bytes par sample (int16)
-	var sample_size:int = 2
-	var total_samples:int = pcm_48k.size() / sample_size
-
-	for i in range(0, total_samples, 3):
-		var byte_index:int = i * sample_size
-
-		# copie les 2 bytes du sample
-		pcm_16k.append(pcm_48k[byte_index])
-		pcm_16k.append(pcm_48k[byte_index + 1])
-
+	var total_samples:int = pcm.size() / 2
+	if total_samples == 0 or src_rate <= 0:
+		return pcm_16k
+	var ratio:float = float(src_rate) / 16000.0
+	var out_count:int = int(total_samples / ratio)
+	pcm_16k.resize(out_count * 2)
+	for i in out_count:
+		var pos:float = i * ratio
+		var i0:int = int(pos)
+		var i1:int = mini(i0 + 1, total_samples - 1)
+		var frac:float = pos - i0
+		var s0:int = pcm.decode_s16(i0 * 2)
+		var s1:int = pcm.decode_s16(i1 * 2)
+		pcm_16k.encode_s16(i * 2, int(s0 + (s1 - s0) * frac))
 	return pcm_16k
+
+func peak_level(pcm: PackedByteArray) -> float:
+	var peak:int = 0
+	for i in range(0, pcm.size() / 2):
+		peak = maxi(peak, absi(pcm.decode_s16(i * 2)))
+	return peak / 32768.0
 
 func _ready()->void:
 	var idx:int = AudioServer.get_bus_index("Micro")
@@ -44,11 +56,17 @@ func _on_record_button_pressed()->void:
 			var newData:PackedByteArray = PackedByteArray()
 			newData.resize(data.size() / 2)
 			for i in range(0, data.size(), 4):
-				var left:int = data.decode_u16(i)
-				var right:int = data.decode_u16(i + 2)
-				newData.encode_u16(i / 2, (left + right) / 2)
+				var left:int = data.decode_s16(i)
+				var right:int = data.decode_s16(i + 2)
+				newData.encode_s16(i / 2, (left + right) / 2)
 			recording.data = newData
 			recording.set_stereo(false)
+		recording_rate = recording.mix_rate
+		print("[Mic] rate=%d Hz, bytes=%d, duration=%.1f s, peak level=%.3f" % [
+			recording_rate, recording.data.size(),
+			recording.data.size() / 2.0 / maxf(recording_rate, 1), peak_level(recording.data)])
+		if peak_level(recording.data) < 0.01:
+			push_warning("[Mic] the recording is almost silent: check the macOS microphone permission for Godot and the input device")
 		emit_signal("recording_ended")
 		is_transcribing = true
 		if thread != null and not thread.is_alive():
@@ -61,10 +79,11 @@ func _on_record_button_pressed()->void:
 		emit_signal("recording_started")
 
 func transcribe_thread(wspr,data,format)->void:
-	var transcription:String = whisper.get_text(downsample_48k_to_16k(data),format)
+	var transcription:String = whisper.get_text(downsample_to_16k(data, recording_rate),format)
 	wspr.call_deferred("transcr_finished",transcription)
 
 func transcr_finished(transcription)->void:
+	print("[Whisper] ", transcription)
 	emit_signal("transcription_finished",transcription)
 	is_transcribing = false
 
