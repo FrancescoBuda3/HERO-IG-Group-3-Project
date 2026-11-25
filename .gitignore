@@ -1,3 +1,23 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+# macOS
+.DS_Store
+
+# Python virtual environment (Piper TTS)
+.venv/
+__pycache__/
+
+# Piper voice models (large, download them with: python3 -m piper.download_voices <voice>)
+*.onnx
+*.onnx.json
+
+# Secrets: never commit API keys
+.env
+*.env
+openrouter_key*.txt
+
+# Local tool settings and logs
+.claude/settings.local.json
+*.log

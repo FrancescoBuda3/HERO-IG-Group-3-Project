@@ -2,7 +2,7 @@ extends Node
 @onready var ttsrequest:HTTPRequest = $TTSRequest
 @onready var audioplayer:AudioStreamPlayer3D = $"../AudioStreamPlayer3D"
 
-@export var piper_port:int = 5000
+@export var piper_port:int = 5001 # 5000 is used by AirPlay Receiver on macOS
 @export var speaker_id:int = 1
 
 @export var use_local_tts_instead:bool = false

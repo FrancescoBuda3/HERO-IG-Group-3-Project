@@ -37,6 +37,75 @@ For the SpeechToText, it uses [Godot Whisper](https://github.com/V-Sekai/godot-w
 
 As a Godot project, you need to add the project in your project's list using Godot "Import" functionality.
 
+# Quick start (macOS, OpenRouter free model)
+
+This is the setup used on this machine: Piper TTS served locally, the LLM served by [OpenRouter](https://openrouter.ai) with free models, Godot 4.6+.
+
+## 1. Prerequisites
+
+- Godot 4.6 or newer (tested with the version in `~/Downloads/Godot.app`).
+- Python 3.12+ (3.14 works) with `piper-tts` and `flask`:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install piper-tts flask
+python3 -m piper.download_voices en_GB-alan-low
+```
+
+- An OpenRouter account and an API key (openrouter.ai → *Keys*).
+
+## 2. Save the OpenRouter key outside the project
+
+The key is read from the `OPENROUTER_API_KEY` environment variable, then from a file in Godot's user folder. On macOS, Godot launched from the Dock does not see shell variables, so use the file:
+
+```bash
+KEYDIR=~/Library/Application\ Support/Godot/app_userdata/MikeTPAGodot
+mkdir -p "$KEYDIR"
+echo 'sk-or-YOUR-KEY' > "$KEYDIR/openrouter_key.txt"
+chmod 600 "$KEYDIR/openrouter_key.txt"
+```
+
+> [!WARNING]
+> Never type the key in the Godot Inspector (`APIkey`): it would be saved in the `.tscn` file and committed.
+
+## 3. Start everything
+
+```bash
+./start_mike.sh
+```
+
+The script checks the key and the connection, starts Piper on **port 5001** and opens the project in Godot. Then press **Play** in Godot, **Space** to start recording, **Space** again to stop. `Ctrl+C` in the terminal stops Piper.
+
+Options: `MIKE_VOICE=en_US-bryce-medium ./start_mike.sh` (other voice), `GODOT_APP=/path/Godot.app ./start_mike.sh` (Godot elsewhere).
+
+## 4. Where to change things
+
+| What | Where |
+|---|---|
+| System prompt (agent context) | `LLMExchange` node of `Agents/mike.tscn`, field *Preprompt* |
+| LLM endpoint (Ollama, OpenWebUI, OpenRouter) | `LLMExchange` → *End Point* |
+| LLM model and fallbacks | `LLMExchange` → *Model Name*, *Fallback Models* (OpenRouter accepts at most 3 models in total) |
+| Speech recognition language | `Whisper` node → *Language* (currently English) |
+| Voice and port | `TTSPiper` node → *Piper Port* (5001), and the voice passed to `piper.http_server` |
+
+## 5. Troubleshooting
+
+| Console message | Cause | Fix |
+|---|---|---|
+| `429 ... rate-limited upstream` | The free model is saturated for all users | Retry, or change/reorder the fallback models |
+| `401` | Wrong or revoked key | Create a new key |
+| `no API key found` | Key file missing or empty | Redo step 2 |
+| `TTS HTTP error` | Piper is not running | Run `./start_mike.sh` |
+| Silent agent, no error | Empty LLM answer or empty transcription | Check the `Received:` line in the Godot console |
+| Slow or "deep" voice | Sample rate mismatch | `wav.mix_rate` in `Scripts/tts_piper.gd` is 16000: use 22050 for `medium` voices |
+
+> [!NOTE]
+> Port 5000 is used by *AirPlay Receiver* on macOS, which is why Piper runs on 5001 here. Free OpenRouter models change often and can disappear: check [openrouter.ai/models](https://openrouter.ai/models) with the *Free* filter.
+
+> [!NOTE]
+> Prompts and transcriptions are sent to OpenRouter and to the model provider. Free models may use them for training depending on your account privacy settings.
+
 # Usage
 
 For now, the project is supposed to be executed from the Godot Editor (you can always build and export it if it is more convenient for you).

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bomc20vvkbx56"]
 
 [ext_resource type="PackedScene" uid="uid://buks0gs6a2ujx" path="res://Agents/mike.tscn" id="1_jjgbg"]
+[ext_resource type="PackedScene" uid="uid://ciyvtsa8netps" path="res://utils/emotion-recognition/emotion_receiver_socket_server.tscn" id="2_21xkr"]
 [ext_resource type="PackedScene" uid="uid://koi47s63k0ed" path="res://Scenes/UI.tscn" id="2_bo1nx"]
 [ext_resource type="Texture2D" uid="uid://dwu7qmg8jkbsa" path="res://Textures/ups.png" id="2_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://beprnrr6fsxjb" path="res://Agents/lara.tscn" id="3_8gbba"]
@@ -40,6 +41,8 @@ albedo_texture = ExtResource("3_kry3j")
 
 [node name="mike" parent="." unique_id=1385355835 node_paths=PackedStringArray("gazetarget") instance=ExtResource("1_jjgbg")]
 gazetarget = NodePath("../Camera3D")
+
+[node name="EmotionReceiverSocketServer" parent="mike" unique_id=65741571 instance=ExtResource("2_21xkr")]
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=785279935]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.665, 0.833)
