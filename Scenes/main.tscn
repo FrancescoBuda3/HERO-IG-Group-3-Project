@@ -3,82 +3,162 @@
 [ext_resource type="PackedScene" uid="uid://buks0gs6a2ujx" path="res://Agents/mike.tscn" id="1_jjgbg"]
 [ext_resource type="PackedScene" uid="uid://ciyvtsa8netps" path="res://utils/emotion-recognition/emotion_receiver_socket_server.tscn" id="2_21xkr"]
 [ext_resource type="PackedScene" uid="uid://koi47s63k0ed" path="res://Scenes/UI.tscn" id="2_bo1nx"]
-[ext_resource type="Texture2D" uid="uid://dwu7qmg8jkbsa" path="res://Textures/ups.png" id="2_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://beprnrr6fsxjb" path="res://Agents/lara.tscn" id="3_8gbba"]
-[ext_resource type="Texture2D" uid="uid://b8e3q0hul5gjr" path="res://Textures/CS.png" id="3_kry3j"]
+[ext_resource type="PackedScene" uid="uid://dvvuy37qa7xmv" path="res://Scenes/boy.glb" id="5_21xkr"]
+[ext_resource type="PackedScene" uid="uid://idenw751a0y0" path="res://Scenes/room v3.glb" id="5_kry3j"]
+[ext_resource type="PackedScene" uid="uid://cs8q5shwh3jyp" path="res://Agents/emma-casual.glb" id="6_21xkr"]
+[ext_resource type="Script" uid="uid://dnu22dnuqqk05" path="res://Agents/emma_animator.gd" id="6_344ge"]
 
 [sub_resource type="Environment" id="Environment_jjgbg"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jjgbg"]
-albedo_color = Color(0.74707943, 0.27340665, 0.54668045, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_jjgbg"]
-material = SubResource("StandardMaterial3D_jjgbg")
-size = Vector3(7, 1, 5)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bo1nx"]
-albedo_color = Color(0.9938981, 1, 0.89686763, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_bo1nx"]
-material = SubResource("StandardMaterial3D_bo1nx")
-size = Vector3(7, 5, 1)
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_kry3j"]
-size = Vector2(1, 0.33)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_21xkr"]
-transparency = 1
-albedo_texture = ExtResource("2_jjvhh")
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_jjvhh"]
-size = Vector2(1, 0.5)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jjvhh"]
-transparency = 1
-albedo_texture = ExtResource("3_kry3j")
 
 [node name="Main" type="Node3D" unique_id=1537848109]
 
 [node name="mike" parent="." unique_id=1385355835 node_paths=PackedStringArray("gazetarget") instance=ExtResource("1_jjgbg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.35, 0, 2.2)
+visible = false
 gazetarget = NodePath("../Camera3D")
 
 [node name="EmotionReceiverSocketServer" parent="mike" unique_id=65741571 instance=ExtResource("2_21xkr")]
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=785279935]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.665, 0.833)
+transform = Transform3D(0.9808212, 0, -0.19491011, 0, 1, 0, 0.19491011, 0, 0.9808212, 17.093813, 0.8185797, 2.0849204)
 fov = 50.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1441665432]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9292531, 1.4446422)
-light_energy = 0.5
+transform = Transform3D(0.99999267, 0, 0.003834516, 0, 1, 0, -0.003834516, 0, 0.99999267, 16.613022, 1.6272533, 9.578997)
+light_color = Color(0.85, 0.75820005, 0.748, 1)
+light_energy = 1.571
+light_indirect_energy = 5.069
+light_volumetric_fog_energy = 0.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=26048246]
 environment = SubResource("Environment_jjgbg")
 
 [node name="Stage" type="Node3D" parent="." unique_id=506506535]
 
-[node name="Floor" type="MeshInstance3D" parent="Stage" unique_id=308698272]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-mesh = SubResource("BoxMesh_jjgbg")
-
-[node name="Wall" type="MeshInstance3D" parent="Stage" unique_id=1767473961]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -1.5)
-mesh = SubResource("BoxMesh_bo1nx")
-
-[node name="LogoUPS" type="MeshInstance3D" parent="Stage" unique_id=686972522]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.693, 2.2, -0.951)
-mesh = SubResource("PlaneMesh_kry3j")
-surface_material_override/0 = SubResource("StandardMaterial3D_21xkr")
-
-[node name="LogoCS" type="MeshInstance3D" parent="Stage" unique_id=701452842]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.812, 2.2, -0.951)
-mesh = SubResource("PlaneMesh_jjvhh")
-surface_material_override/0 = SubResource("StandardMaterial3D_jjvhh")
-
-[node name="Ui" parent="." unique_id=1214421155 instance=ExtResource("2_bo1nx")]
+[node name="Ui" parent="." unique_id=1214421155 node_paths=PackedStringArray("agent") instance=ExtResource("2_bo1nx")]
+agent = NodePath("../mike")
 
 [node name="lara" parent="." unique_id=374884667 instance=ExtResource("3_8gbba")]
 process_mode = 4
+visible = false
+
+[node name="AuxScene" parent="." unique_id=572642317 instance=ExtResource("6_21xkr")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 5, 0, -6)
+script = ExtResource("6_344ge")
+
+[node name="Scene" parent="AuxScene" index="0" unique_id=1426073629]
+transform = Transform3D(-0.98298144, 0, 0.18370494, 0, 1, 0, -0.18370494, 0, -0.98298144, -13.589838, 0, 8.529961)
+
+[node name="Rig" parent="AuxScene/Scene" index="0" unique_id=1690199976]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2832775, -0.4330163, 0.6941738)
+
+[node name="Skeleton3D" parent="AuxScene/Scene/Rig" index="0" unique_id=1182668907]
+bones/0/position = Vector3(-0.041141283, 0.9286912, 0.00041822344)
+bones/0/rotation = Quaternion(0.5147046, 0.5030363, 0.5162715, 0.46421704)
+bones/1/rotation = Quaternion(0.02767793, -0.0149489865, -0.0063598747, 0.9994849)
+bones/2/rotation = Quaternion(0.0495491, 0.9983997, 0.027199037, -0.0018294326)
+bones/3/rotation = Quaternion(3.064363e-08, -5.4573228e-08, -0.07185987, 0.99741477)
+bones/4/rotation = Quaternion(-0.050787464, -0.011304736, 0.051491793, 0.9973172)
+bones/5/rotation = Quaternion(-1.5023308e-07, 4.0735445e-06, 0.7132446, 0.70091516)
+bones/6/rotation = Quaternion(0.061007038, 0.9905303, -0.122993, -0.00074610807)
+bones/7/rotation = Quaternion(-1.2524772e-08, 8.774887e-08, -0.111405075, 0.9937751)
+bones/8/rotation = Quaternion(0.048261248, 0.0041534887, 0.08932518, 0.99482393)
+bones/9/rotation = Quaternion(-7.763055e-06, -0.00042046653, 0.707476, 0.70673716)
+bones/10/rotation = Quaternion(-0.0028377038, 0.0008071916, 0.047899783, 0.9988479)
+bones/11/rotation = Quaternion(0.008710252, -0.010089978, 0.00085470296, 0.9999109)
+bones/12/rotation = Quaternion(0.024103522, -0.019890541, 0.060339637, 0.9976886)
+bones/13/rotation = Quaternion(0.012625959, 0.020074364, -0.07428921, 0.9969548)
+bones/20/rotation = Quaternion(0.15813284, -0.20155297, 0.714626, 0.6509071)
+bones/22/rotation = Quaternion(0.17068313, -0.17037074, 0.68687385, 0.6855987)
+bones/23/rotation = Quaternion(0.0012341535, -0.0042529847, 0.75975066, 0.6501995)
+bones/24/rotation = Quaternion(-0.038572934, -0.2157344, -0.16956267, 0.960843)
+bones/25/rotation = Quaternion(0.00052101247, -0.00019534204, -0.1728568, 0.98494685)
+bones/26/rotation = Quaternion(0.0030674154, 0.013344086, -0.17725731, 0.9840693)
+bones/27/rotation = Quaternion(0.038447328, 0.2168667, -0.16961853, 0.9605833)
+bones/30/rotation = Quaternion(-1.5446878e-07, -2.7907338e-06, 0.6757405, 0.7371397)
+bones/37/rotation = Quaternion(-0.15812986, 0.20154585, 0.71462804, 0.6509078)
+bones/39/rotation = Quaternion(-0.16951537, 0.17060754, 0.6869282, 0.685775)
+bones/40/rotation = Quaternion(-0.009270132, 0.009455482, 0.6426328, 0.76606005)
+bones/41/rotation = Quaternion(-0.009271526, 0.00945268, 0.6426328, 0.76605994)
+bones/42/rotation = Quaternion(0.6656448, -0.15146814, 0.72896594, -0.05082438)
+bones/43/rotation = Quaternion(0.6599097, 0.16217773, -0.21321228, 0.7019673)
+bones/44/rotation = Quaternion(-1.0191461e-08, 7.611087e-08, -0.6838762, 0.7295981)
+bones/45/rotation = Quaternion(-0.36233157, -0.12345064, -0.4587192, 0.80190563)
+bones/46/rotation = Quaternion(-0.022766026, -0.018088566, -0.018298503, 0.9994097)
+bones/47/rotation = Quaternion(4.6780016e-08, -2.4078665e-07, -0.047965087, 0.9988491)
+bones/48/rotation = Quaternion(-8.4258154e-08, 4.9699906e-09, -0.040169314, 0.99919295)
+bones/49/rotation = Quaternion(-0.0759617, -0.07867248, 0.04879101, 0.99280405)
+bones/50/rotation = Quaternion(-8.58572e-08, -1.2552325e-06, 0.07098033, 0.9974777)
+bones/51/rotation = Quaternion(-1.7723249e-08, -4.204789e-08, -0.11090171, 0.99383146)
+bones/52/rotation = Quaternion(-0.13903825, -0.088837564, 0.27085993, 0.9483729)
+bones/53/rotation = Quaternion(-1.11169925e-07, 3.4505604e-07, -0.112378374, 0.9936655)
+bones/54/rotation = Quaternion(-3.84985e-08, 4.807179e-07, 0.12723127, 0.99187315)
+bones/55/rotation = Quaternion(-0.06803139, -0.049253747, 0.1663988, 0.9824751)
+bones/56/rotation = Quaternion(-2.66969e-07, -2.03074e-06, 0.034660403, 0.9993992)
+bones/57/rotation = Quaternion(-1.3399813e-07, -7.551856e-08, 0.007037057, 0.9999753)
+bones/58/rotation = Quaternion(0.76161146, 0.5075585, 0.13936527, 0.37803385)
+bones/59/rotation = Quaternion(-2.017259e-07, -7.0161725e-08, -0.018837273, 0.99982256)
+bones/60/rotation = Quaternion(7.897552e-08, -1.1021089e-07, -0.015851788, 0.9998744)
+bones/61/rotation = Quaternion(-0.6158074, 0.14787793, 0.77234405, -0.0489707)
+bones/62/rotation = Quaternion(-0.5377723, -0.3430897, -0.029218066, 0.7695692)
+bones/63/rotation = Quaternion(-6.080403e-08, -5.4470696e-08, -0.629894, 0.7766812)
+bones/64/rotation = Quaternion(0.34384835, -0.05210544, -0.33471745, 0.8757955)
+bones/65/rotation = Quaternion(0.05372311, 0.040862065, 0.00041709936, 0.9977194)
+bones/66/rotation = Quaternion(1.420695e-08, 4.947086e-08, -0.029461853, 0.99956596)
+bones/67/rotation = Quaternion(8.208435e-08, -1.8556825e-07, 0.04189902, 0.99912184)
+bones/68/rotation = Quaternion(0.11196111, 0.116676465, 0.05547093, 0.98527884)
+bones/69/rotation = Quaternion(-3.0227e-08, 1.4682405e-07, 0.15382433, 0.9880982)
+bones/70/rotation = Quaternion(4.7023235e-08, -3.076169e-08, -0.036188778, 0.99934506)
+bones/71/rotation = Quaternion(0.18142726, 0.13214478, 0.2870404, 0.93125176)
+bones/72/rotation = Quaternion(-1.0402743e-07, 4.0915015e-08, -0.06210328, 0.9980697)
+bones/73/rotation = Quaternion(-4.7308895e-08, -6.781378e-08, 0.1964688, 0.9805101)
+bones/74/rotation = Quaternion(0.08861199, 0.08784009, 0.18717487, 0.97437036)
+bones/75/rotation = Quaternion(8.588912e-08, 8.492294e-08, 0.104655646, 0.9945086)
+bones/76/rotation = Quaternion(5.5626387e-08, 7.599483e-08, 0.085643046, 0.99632597)
+bones/77/rotation = Quaternion(-0.66039807, -0.4969067, 0.16741914, 0.53752124)
+bones/78/rotation = Quaternion(6.469998e-08, -1.1809025e-07, -0.0033597504, 0.9999944)
+bones/79/rotation = Quaternion(-6.69948e-08, 7.1198045e-08, -0.014264099, 0.99989825)
+
+[node name="Body" parent="AuxScene/Scene/Rig/Skeleton3D" index="0" unique_id=1260252710]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.09511, 0, 14.30595)
+blend_shapes/mouthDimpleLeft = 1.0
+blend_shapes/mouthDimpleRight = 1.0
+blend_shapes/mouthFrownLeft = -0.4
+blend_shapes/mouthFrownRight = -0.4
+blend_shapes/mouthPressLeft = 0.1
+blend_shapes/mouthPressRight = 0.1
+blend_shapes/mouthSmileLeft = 0.2
+blend_shapes/mouthSmileRight = 0.2
+
+[node name="Hair" parent="AuxScene/Scene/Rig/Skeleton3D" index="1" unique_id=246128071]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.09511, 0, 14.30595)
+
+[node name="Outfit_original" parent="AuxScene/Scene/Rig/Skeleton3D" index="2" unique_id=653020950]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.09511, 0, 14.30595)
+
+[node name="Skin_original" parent="AuxScene/Scene/Rig/Skeleton3D" index="3" unique_id=611496002]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.09511, 0, 14.30595)
+
+[node name="boy" parent="AuxScene" unique_id=343632388 instance=ExtResource("5_21xkr")]
+transform = Transform3D(0.9852396, 0, 0.17118052, 0, 1, 0, -0.17118052, 0, 0.9852396, -13.603958, 0.0037810802, -6.482022)
+
+[node name="room v3" parent="." unique_id=1545064006 instance=ExtResource("5_kry3j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.532188, 0.008963108, -2.4140263)
+
+[node name="05-xdetw153489" parent="room v3/Node/Assembly-419" parent_id_path=PackedInt32Array(1545064006, 1177545298) index="338" unique_id=909644360]
+visible = false
+
+[node name="05-xdetw862639" parent="room v3/Node/Assembly-419" parent_id_path=PackedInt32Array(1545064006, 1177545298) index="339" unique_id=865082676]
+visible = false
+
+[node name="05-xdetw490928" parent="room v3/Node/Assembly-419" parent_id_path=PackedInt32Array(1545064006, 1177545298) index="340" unique_id=1816462940]
+visible = false
+
+[node name="Geom3D322" parent="room v3/Node/Assembly-419/05-xdetw490928" index="0" unique_id=1073204969]
+transform = Transform3D(1, 0, -1.4210855e-14, -2.9802322e-08, 0.99999994, 7.1054274e-15, 0, -1.4210855e-14, 1, 0, 0, 0)
+
+[node name="05-xdetw138547" parent="room v3/Node/Assembly-419" parent_id_path=PackedInt32Array(1545064006, 1177545298) index="341" unique_id=652213447]
 visible = false
 
 [connection signal="llmresponse_received" from="mike" to="Ui" method="_on_agent_llmresponse_received"]
@@ -89,3 +169,6 @@ visible = false
 [connection signal="recording_ended" from="lara" to="Ui" method="_on_agent_recording_ended"]
 [connection signal="recording_started" from="lara" to="Ui" method="_on_agent_recording_started"]
 [connection signal="transcription_finished" from="lara" to="Ui" method="_on_agent_transcription_finished"]
+
+[editable path="AuxScene"]
+[editable path="room v3"]

@@ -21,3 +21,6 @@ openrouter_key*.txt
 # Local tool settings and logs
 .claude/settings.local.json
 *.log
+
+# Too large for GitHub (132 MB, limit 100 MB): share it separately
+Scenes/room v3.glb

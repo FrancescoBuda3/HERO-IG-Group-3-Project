@@ -6,7 +6,7 @@
 # Premi Ctrl+C in questo terminale per chiudere anche Piper.
 
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
-VOICE="${MIKE_VOICE:-en_GB-alan-low}"      # voce Piper (file .onnx nella cartella del progetto)
+VOICE="${MIKE_VOICE:-en_GB-semaine-medium}"      # voce Piper (file .onnx nella cartella del progetto)
 PORT="${MIKE_PIPER_PORT:-5001}"            # deve coincidere con piper_port in tts_piper.gd
 GODOT_APP="${GODOT_APP:-$HOME/Downloads/Godot.app}"
 KEY_FILE="$HOME/Library/Application Support/Godot/app_userdata/MikeTPAGodot/openrouter_key.txt"

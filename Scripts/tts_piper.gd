@@ -3,7 +3,7 @@ extends Node
 @onready var audioplayer:AudioStreamPlayer3D = $"../AudioStreamPlayer3D"
 
 @export var piper_port:int = 5001 # 5000 is used by AirPlay Receiver on macOS
-@export var speaker_id:int = 1
+@export var speaker_id:int = 3 # semaine voice: 0 prudence (F), 1 spike (M), 2 obadiah (M), 3 poppy (F)
 
 @export var use_local_tts_instead:bool = false
 @export var local_tts_language:String = "en"
@@ -18,6 +18,9 @@ func _ready() -> void:
 		voice_id = voices[local_tts_voice_id]
 
 func sanitize_text(text: String) -> String:
+	# LLMs sometimes add markdown asterisks, which must not reach the TTS
+	text = text.replace("*", "")
+
 	var regex_quotes:RegEx = RegEx.new()
 	regex_quotes.compile("[\"']")
 	text = regex_quotes.sub(text, "", true)
@@ -72,8 +75,8 @@ func _on_ttsrequest_completed(
 	var wav:AudioStreamWAV = AudioStreamWAV.new()
 	wav.data = body
 	wav.format = AudioStreamWAV.FORMAT_16_BITS
-	#wav.mix_rate = 22050  # ⚠ dépend de Piper (souvent 22050 ou 16000)
-	wav.mix_rate = 16000  # ⚠ dépend de Piper (souvent 22050 ou 16000)
+	wav.mix_rate = 22050  # ⚠ dépend de Piper (souvent 22050 ou 16000)
+	#wav.mix_rate = 16000  # ⚠ dépend de Piper (souvent 22050 ou 16000)
 	wav.stereo = false
 
 	audioplayer.stream = wav

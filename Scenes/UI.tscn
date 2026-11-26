@@ -2,6 +2,44 @@
 
 [ext_resource type="Script" uid="uid://dxhhyfvh8rgyj" path="res://Scripts/ui.gd" id="1_nxvpl"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_subtitles"]
+content_margin_left = 28.0
+content_margin_top = 18.0
+content_margin_right = 28.0
+content_margin_bottom = 18.0
+bg_color = Color(0.984, 0.941, 0.882, 0.96)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.906, 0.725, 0.663, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+shadow_color = Color(0.2, 0.12, 0.1, 0.18)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pill"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 22.0
+content_margin_bottom = 10.0
+bg_color = Color(0.984, 0.941, 0.882, 0.96)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.906, 0.725, 0.663, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.2, 0.12, 0.1, 0.18)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
 [node name="Ui" type="Control" unique_id=1214421155]
 layout_mode = 3
 anchors_preset = 15
@@ -9,59 +47,64 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_nxvpl")
 
-[node name="HBoxContainer" type="VBoxContainer" parent="." unique_id=1824402252]
+[node name="Subtitles" type="PanelContainer" parent="." unique_id=1824402252]
+visible = false
 layout_mode = 1
-anchors_preset = 15
+anchor_top = 1.0
+anchor_right = 0.62
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -24.0
+offset_bottom = -24.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_subtitles")
+
+[node name="Text" type="RichTextLabel" parent="Subtitles" unique_id=505264386]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.18, 0.165, 0.227, 1)
+theme_override_font_sizes/normal_font_size = 22
+theme_override_font_sizes/italics_font_size = 22
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 3
+
+[node name="VoiceStatePill" type="PanelContainer" parent="." unique_id=638443500]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 2
+offset_left = -24.0
+offset_top = -24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pill")
 
-[node name="PanelUser" type="PanelContainer" parent="HBoxContainer" unique_id=638443500]
+[node name="Row" type="HBoxContainer" parent="VoiceStatePill" unique_id=2139052269]
 layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
 
-[node name="UserContainer" type="MarginContainer" parent="HBoxContainer/PanelUser" unique_id=2104614628]
+[node name="Icon" type="TextureRect" parent="VoiceStatePill/Row" unique_id=2127680314]
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelUser/UserContainer" unique_id=2139052269]
+[node name="Label" type="Label" parent="VoiceStatePill/Row" unique_id=1432427116]
 layout_mode = 2
-
-[node name="Label" type="Label" parent="HBoxContainer/PanelUser/UserContainer/HBoxContainer" unique_id=2127680314]
-layout_mode = 2
-text = "USER : "
-
-[node name="UserMessage" type="RichTextLabel" parent="HBoxContainer/PanelUser/UserContainer/HBoxContainer" unique_id=505264386]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Press Space  to start recording your voice"
-fit_content = true
-horizontal_alignment = 1
-
-[node name="PanelAgent" type="PanelContainer" parent="HBoxContainer" unique_id=1189723502]
-layout_mode = 2
-
-[node name="AgentContainer" type="MarginContainer" parent="HBoxContainer/PanelAgent" unique_id=219848923]
-layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
-
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelAgent/AgentContainer" unique_id=1815658326]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="HBoxContainer/PanelAgent/AgentContainer/HBoxContainer" unique_id=1432427116]
-layout_mode = 2
-text = "AGENT  : "
-
-[node name="AgentMessage" type="RichTextLabel" parent="HBoxContainer/PanelAgent/AgentContainer/HBoxContainer" unique_id=326601925]
-layout_mode = 2
-size_flags_horizontal = 3
-fit_content = true
+theme_override_colors/font_color = Color(0.18, 0.165, 0.227, 1)
+theme_override_font_sizes/font_size = 20
+text = "Press Space to talk"
